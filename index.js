@@ -11,10 +11,17 @@ require('./config/passport')(passport, LocalStrategy);
 
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/teammotivate');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback () {
+  console.log('connection successful');
+});
 
 var home = require('./routes/home');
 var projects = require('./routes/projects');
 var tasks = require('./routes/tasks');
+var users = require('./routes/users');
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({
@@ -37,6 +44,7 @@ app.use('/projects/:id/tasks/:id', tasks.resource);
 app.use('/projects/:id/tasks', tasks.collection);
 app.use('/projects/:id', projects.resource);
 app.use('/projects', projects.collection);
+app.use('/users', users);
 app.use('/', home);
 
 app.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,
