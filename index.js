@@ -7,7 +7,9 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-require('./config/passport')(passport, LocalStrategy);
+
+var User = require('./models/user').User;
+require('./config/passport')(passport, User, LocalStrategy);
 
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
@@ -40,10 +42,8 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/projects/:id/tasks/:id', tasks.resource);
-app.use('/projects/:id/tasks', tasks.collection);
-app.use('/projects/:id', projects.resource);
-app.use('/projects', projects.collection);
+app.use('/projects', tasks);
+app.use('/projects', projects);
 app.use('/users', users);
 app.use('/', home);
 

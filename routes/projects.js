@@ -1,25 +1,25 @@
 var express = require('express');
-var collectionRouter = express.Router();
-var resourceRouter = express.Router();
+var router = express.Router();
 
 // Returns all the projects accessible to a user.
-collectionRouter.get('/', function(request, response) {
+router.get('/', function(request, response) {
 });
 
 // Create a new project.
-collectionRouter.post('/', function(request, response) {
+router.post('/', function(request, response) {
 });
 
 // Returns the project specified by an id.
-resourceRouter.get('/', function(request, response) {
+router.get('/:id', function(request, response) {
+  console.log(request.params);
 });
 
 // Edit a project.
-resourceRouter.post('/', function(request, response) {
+router.post('/:id', function(request, response) {
 });
 
 // Delete a project.
-resourceRouter.delete('/', function(request, response) {
+router.delete('/:id', function(request, response) {
 });
 
-module.exports = {resource: resourceRouter, collection: collectionRouter}
+module.exports = router;
