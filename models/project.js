@@ -4,7 +4,7 @@ var projectSchema = new mongoose.Schema({
   leader: String,
   name: String,
   description: String,
-  tasks: [Number],
+  tasks: [String],
   users: [String]
 });
 
