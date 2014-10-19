@@ -2,6 +2,7 @@ var mongoose = require("mongoose");
 
 var projectSchema = new mongoose.Schema({
   leader: String,
+  name: String,
   description: String,
   tasks: [Number]
 });
