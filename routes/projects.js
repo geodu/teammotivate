@@ -61,10 +61,10 @@ router.post('/:id', function(request, response) {
 	var name = request.body.name;
 	Project.update({id: id}, {$set: {name: name, description: description}}, function(err, docs) {
 		if (err) {
-			response.json({success: false)
+			response.json({success: false});
 		}
 		else {
-			response.json({success: true, project: docs)
+			response.json({success: true, project: docs});
 		}
 	})
 });

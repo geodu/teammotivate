@@ -1,5 +1,4 @@
-var mongoose = require("mongoose")
-   ,ObjectId = Schema.ObjectId;
+var mongoose = require("mongoose");
 
 var projectSchema = new mongoose.Schema({
   leader: String,
