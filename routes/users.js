@@ -20,7 +20,7 @@ router.post('/', function(request, response) {
     if (err) {
       response.send(err);
     }
-    else if (docs) {
+    else if (doc) {
       response.json({success: false, message: 'User already exists'});
     }
     else if (request.body.password.length < 8) {
