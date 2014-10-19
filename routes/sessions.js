@@ -5,7 +5,7 @@ var Router = function(passport) {
   var router = express.Router();
 
   // Returns a list of all the users.
-  router.put('/', passport.authenticate('local'), function(request, response) {
+  router.post('/', passport.authenticate('local'), function(request, response) {
     response.json({success: true});
   });
 
