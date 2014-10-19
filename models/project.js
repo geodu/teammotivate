@@ -4,7 +4,8 @@ var projectSchema = new mongoose.Schema({
   leader: String,
   name: String,
   description: String,
-  tasks: [Number]
+  tasks: [Number],
+  users: [String]
 });
 
 var project = mongoose.model('Project', projectSchema);
