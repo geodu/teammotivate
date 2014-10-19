@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var Project = require('../models/project');
-var User = require('../models/user');
+var Project = require('../models/project').Project;
+var User = require('../models/user').User;
 
 // Returns all the projects accessible to a user.
 router.get('/', function(request, response) {

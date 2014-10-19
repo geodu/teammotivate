@@ -24,6 +24,7 @@ var home = require('./routes/home');
 var projects = require('./routes/projects');
 var tasks = require('./routes/tasks');
 var users = require('./routes/users');
+var sessions = require('./routes/sessions')(passport);
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({
@@ -45,6 +46,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/projects', tasks);
 app.use('/projects', projects);
 app.use('/users', users);
+app.use('/sessions', sessions);
 app.use('/', home);
 
 app.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,
