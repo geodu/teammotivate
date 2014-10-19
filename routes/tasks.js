@@ -3,83 +3,55 @@ var router = express.Router();
 
 var Projects = require('../models/project').Project;
 var Tasks = require('../models/task').Task;
+var Users = require('../models/user').User;
+var utils = require('../utils');
 
 // Returns all the tasks that a user is responsible for.
-router.get('/:id/tasks', function(request, response) {
+router.get('/:id/tasks', utils.loggedIn, function(request, response) {
 	var userTasks = [];
-	//TODO: find way to increment id's. For now id is a number refers to _id
 	Projects.findOne({ _id: request.params.id }, function(projectErr, project) {
-		if (projectErr) {
-			response.send(projectErr);
-		}
+		utils.handleError(projectErr);
 		else if (!project) {
 			response.send('Project ' + request.params.id + ' cannot be found');
+			return;
 		}
-		//TODO: for now ids in tasks array are _id's that are numbers
 		taskIdList = project.tasks;
 		//for each task in project
-		for (var i = 0; i<taskIdList.length; i++) {
-			Tasks.findOne({ _id: taskIdList[i] }, function(taskErr, task){
-				if (taskErr) {
-					response.send(taskErr);
-				}
+		for (var i = 0; i < taskIdList.length; i++) {
+			Tasks.findOne({ _id: taskIdList[i] }, function(taskErr, task) {
+				utils.handleError(taskErr);
 				else if (!task) {
-					response.send('Task with id '+ taskIdList[i] + ', which is part of project ' + request.params.id+ ', cannot be found');
+					console.log('Task with id '+ taskIdList[i] + ', which is part of project ' + request.params.id+ ', cannot be found');
 				}
-				else if (task.assignee === request.session.username) {
+				else if (task.assignee === request.user.username) {
 					userTasks.push(task);
-				}
-				else if (i===taskIdList.length-1) {
-					response.json({tasks: userTasks}); // return all docs in JSON format
 				}
 			});
 		}
+		response.json({tasks: userTasks}); // return all docs in JSON format
 	});
 });
 
 // Create a new task.
-router.post('/:id/tasks', function(request, response) {
+router.post('/:id/tasks', utils.loggedIn, function(request, response) {
+	var newDeadline = new Date(request.body.deadline);
 	var newTask = new Tasks({
     assignee: request.body.assignee,
   	description: request.body.description,
   	completion: request.body.completion, 
-  	deadline: request.body.deadline,
+  	deadline: new Date(request.body.deadline)
   });
   newTask.save(function(error) {
-  	//TODO: is this error handling right?
-  	if (error) {
-  		response.send(error);
-  	}
-  });
-  Tasks.findOne({ assignee: request.session.username }, function(taskErr, task) {
-  	if (taskErr) {
-  		response.send(taskErr);
-  	}
-  	else if (!task) {
-  		response.send('newly saved task cannot be found in database');
-  	}
-  	if (!(task.assignee === request.body.assignee && task.description === request.body.description && task.completion === request.body.completion && task.deadline===request.body.deadline)){
-  		response.send('newly saved task fields do not match with designated field values');
-  	}
-	 	Projects.findOne({ _id: request.params.id }, function(projectErr, project) {
-	 		if (projectErr) {
-  			response.send(projectErr);
-	 		}
-	 		else if (!project) {
-	 			response.send('project ' + request.params.id + ' cannot be found');
-	 		}
-
-	 		var updatedTasks = project.tasks;
-	 		updatedTasks.push(task._id);
-	 		//took out numberAffected
-	 		Projects.update({ _id: request.params.id }, { tasks: updatedTasks }, function(err) {
-	 			//TODO: correct error handling?
-	 			if (err) { 
-  				response.send(err);
+  	utils.handleError(error);
+ 		Projects.update({ _id: request.params.id }, { $push: { tasks: newTask._id }}, function(err) {
+ 			utils.handleError(err);
+ 			Users.update({ username: request.user.username}, { $push: { tasks: newTask._id }}, function(err) {
+	 			utils.handleError(err);
+	 			else {
+	 				response.json({success: true});
 	 			}
-	 			response.json({success: true});
-	 		});
-	 	});
+ 			});
+ 		});	
 	});
 });
 
@@ -87,58 +59,50 @@ router.post('/:id/tasks', function(request, response) {
 router.get('/:id1/tasks/:id2', function(request, response) {
   //console.log(request.params);
 	Tasks.findOne( {_id: request.params.id2 }, function(taskErr, foundTask) {
-		if (taskErr) {
-			response.send(taskErr);
-		}
+		utils.handleError(taskErr);
 		else if (!foundTask) {
-			response.json({ success: false, task: {} });
+			response.json({ success: false });
 		}
-		response.json({ success: true, task: foundTask });
+		else {
+			response.json({ success: true, task: foundTask });
+		}
 	});
 });
 
 // Edit a task by overwriting the task associated with an id.
 router.post('/:id1/tasks/:id2', function(request, response) {
-	//took out numberAffected
-	Tasks.update({ _id: request.params.id2 }
-		, { assignee: request.body.assignee, description: request.body.description, completion: request.body.completion, deadline: request.body.deadline}
-		, function(err) {
-			if (err) {
-				response.send(err);
+	var newDeadline = new Date(request.body.deadline);
+	Tasks.update({ _id: request.params.id2 }, {
+		assignee: request.body.assignee,
+		description: request.body.description,
+		completion: request.body.completion,
+		deadline: newDeadline}, function(err, numAffected) {
+			utils.handleError(err);
+			else if (numAffected === 0) {
+				response.json({ success: false});
 			}
-			Tasks.findOne({ _id: request.params.id2 }, function(taskErr, task) {
-				if (taskErr) {
-					response.send(taskErr);
-				}
-				else if (!task) {
-					response.send('Task ' + request.params.id2 + ' not found');
-				}
-				else if (!(task.assignee === request.body.assignee && task.description === request.body.description && task.completion === request.body.completion && task.deadline===request.body.deadline)){
-		  		response.send('newly saved task fields do not match with designated field values');
-		  	}
+			else {
 				response.json({ success: true });
-			});
+			}
 	});
 });
 
 // Delete a task.
-router.delete('/:id1/tasks/:id2', function(request, response) {
+router.delete('/:id1/tasks/:id2', utils.loggedIn, function(request, response) {
 	Tasks.remove({ _id: request.params.id2 }, function(err) {
-		if (err) {
-			response.send(err);
+		utils.handleError(err);
+		else {
+			Projects.update({ _id: request.params.id1 }, { $pull: { tasks: request.params.id2 }}, function(err) {
+	 			utils.handleError(err);
+	 			Users.update({ username: request.user.username}, { $pull: { tasks: request.params.id2 }}, function(err) {
+		 			utils.handleError(err);
+		 			else {
+		 				response.json({success: true});
+		 			}
+	 			});
+	 		});	
 		}
-		Tasks.findOne({ _id: request.params.id2 }, function(taskErr, task) {
-			if (taskErr) {
-				response.send(taskErr);
-			}
-			else if (!task){
-				response.json({ success: true});
-			}
-			else {
-				response.json({success: false});
-			}
-		})
-	})
+	});
 });
 
 module.exports = router;
