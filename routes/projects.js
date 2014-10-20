@@ -8,6 +8,8 @@ var utils = require('../utils');
 router.get('/', utils.loggedIn, function(request, response) {
 	var username = request.user.username;
 	User.findOne({username: username}, function(err, docs) {
+		console.log(err);
+		console.log(docs);
 		utils.handleError(err);
 		var projects = docs.projects;
 		response.json({success: true, projects: projects});
@@ -27,13 +29,14 @@ router.post('/', utils.loggedIn, function(request, response) {
 	});
 	proj.save(function (err, docs) {
 		utils.handleError(err);
-		if (data.users) {data.users.push(docs.leader);}//leader is a member of the project
-		for (var i = 0; i < data.users.length; i++) {
-			console.log(data.users[i].username);
-			User.update({username: data.users[i].username}, {$push: {projects: docs._id}}, function (err, docs){
-				utils.handleError(err);
-			});
-		}
+		//if (data.users) {data.users.push(docs.leader);}//leader is a member of the project
+		//for (var i = 0; i < data.users.length; i++) {
+		console.log(leader);
+		User.update({username: leader}, {$push: {projects: docs._id}}, function (err, docs){
+			console.log(err);
+			utils.handleError(err);
+		});
+		//}
 		response.json({success: true, id: docs._id});
 	});
 });
@@ -55,7 +58,7 @@ router.post('/:id', utils.loggedIn, function(request, response) {
 	var description = request.body.description;
 	var leader = request.body.leader;
 	var name = request.body.name;
-	Project.update({"$and": [{_id: id}, {leader: username}]}, {$set: {name: name, description: description}}, function(err, numUpdated) {
+	Project.update({_id: id, leader: username}, {$set: {name: name, description: description}}, function(err, numUpdated) {
 		utils.handleError(err);
 		if (numUpdated === 0) {
 			response.json({success: false});

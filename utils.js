@@ -8,7 +8,9 @@ var loggedIn = function(request, response, next) {
 }
 
 var handleError = function(err) {
-  throw err;
+	if (err) {
+  	throw err;
+	}
 }
 
 module.exports = {
