@@ -27,11 +27,11 @@ router.post('/', utils.loggedIn, function(request, response) {
 	  users: data.users,
 	  tasks: []
 	});
-	proj.save(function (err, docs) {
+	proj.save(function(err, docs) {
 		utils.handleError(err);
 		console.log(docs.users);
 		for (var i = 0; i < docs.users.length; i++) {
-			User.update({username: docs.users[i]}, {$push: {projects: docs._id}}, function (err, docs){
+			User.update({username: docs.users[i]}, {$push: {projects: docs._id}}, function (err, docs) {
 				utils.handleError(err);
 			});
 		}
@@ -45,7 +45,15 @@ router.get('/:id', utils.loggedIn, function(request, response) {
   var id = request.params.id;
   Project.findOne({_id: id}, function(err, docs) {
 		utils.handleError(err);
-		response.json({success: true, project: docs});
+		if (!docs) {
+			response.json({success: false, message: 'no project found'});
+		}
+		else if (docs.users.indexOf(request.user.username) === -1) {
+			response.json({success: false, message: 'not a member of the project'});
+		}
+		else {
+			response.json({success: true, project: docs});
+		}
   });
 });
 
@@ -56,10 +64,11 @@ router.post('/:id', utils.loggedIn, function(request, response) {
 	var description = request.body.description;
 	var leader = request.body.leader;
 	var name = request.body.name;
-	Project.update({_id: id, leader: username}, {$set: {name: name, description: description}}, function(err, numUpdated) {
+	var users = request.body.users;
+	Project.update({_id: id, leader: username}, {$set: {name: name, description: description, leader: leader, users: users}}, function(err, numUpdated) {
 		utils.handleError(err);
 		if (numUpdated === 0) {
-			response.json({success: false});
+			response.json({success: false, message: 'not your project'});
 		}
 		else {
 			response.json({success: true});
@@ -71,10 +80,30 @@ router.post('/:id', utils.loggedIn, function(request, response) {
 router.delete('/:id', utils.loggedIn, function(request, response) {	
 	var username = request.user.username;
 	var id = request.params.id;
-	Project.remove({_id: id, leader: username}, function(err) {
+	Project.findById(id, function(err, proj) {
 		utils.handleError(err);
-		response.json({success: true});
-	});
+		if (!proj) {
+			response.json({success: false, message: 'No project of the id found'});
+		}
+		else if (proj.leader === username) {
+			console.log(proj);
+			proj.users
+			proj.remove();
+			for (var i = 0; i < proj.users.length; i++) {
+				User.update({username: proj.users[i]}, {$pull: {projects: proj._id}}, function (err, docs) {
+					utils.handleError(err);
+				});
+			}
+			response.json({success: true});
+		}
+		else {
+			response.json({success: false, message: 'Not a leader of the project'});
+		}
+	})
+	// Project.remove({_id: id, leader: username}, function(err) {
+	// 	utils.handleError(err);
+	// 	response.json({success: true});
+	// });
 });
 
 module.exports = router;
