@@ -19,7 +19,13 @@ router.post('/', utils.loggedIn, function(request, response) {
 	var data = request.body;
 	console.log(data);
 	var user = request.user.username;
-	if (data.users) {data.users.push(user);}
+	if (data.users) {
+		data.users.push(user);
+	}
+	else {
+		response.json({success: false, message: 'Need to specify users'});
+		return;
+	}
 	var proj = new Project({
 		name: data.name,
 	  leader: user,
@@ -65,12 +71,43 @@ router.post('/:id', utils.loggedIn, function(request, response) {
 	var leader = request.body.leader;
 	var name = request.body.name;
 	var users = request.body.users;
-	Project.update({_id: id, leader: username}, {$set: {name: name, description: description, leader: leader, users: users}}, function(err, numUpdated) {
+	if (users) {
+		users.push(username);
+	}
+	else {
+		response.json({success: false, message: 'Need to specify users'});
+		return;
+	}
+
+	Project.findOneAndUpdate({_id: id, leader: username}, {$set: {name: name, description: description, leader: leader, users: users}}, function(err, proj) {
 		utils.handleError(err);
-		if (numUpdated === 0) {
-			response.json({success: false, message: 'not your project'});
+		if (!proj) {
+			response.json({success: false, message: 'cannot edit project unless leader'});
+			return;
 		}
-		else {
+		else {		
+			var deletedUsers = [];
+			var addedUsers = [];
+			for(var i = 0; i < proj.users.length; i++) {
+				if (users.indexOf(proj.users[i]) === -1) {
+					deletedUsers.push(proj.users[i]);
+				}
+			}
+			for(var i = 0; i < users.length; i++) {
+				if (proj.users.indexOf(users[i]) === -1) {
+					addedUsers.push(users[i]);
+				}
+			}
+			for (var i = 0; i < deletedUsers.length; i++) {
+				User.update({username: deletedUsers[i]}, {$pull: {projects: id}}, function (err, docs) {
+					utils.handleError(err);
+				});
+			}
+			for (var i = 0; i < addedUsers.length; i++) {
+				User.update({username: addedUsers[i]}, {$push: {projects: id}}, function (err, docs) {
+					utils.handleError(err);
+				});
+			}
 			response.json({success: true});
 		}
 	});
