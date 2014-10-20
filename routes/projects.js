@@ -8,8 +8,6 @@ var utils = require('../utils');
 router.get('/', utils.loggedIn, function(request, response) {
 	var username = request.user.username;
 	User.findOne({username: username}, function(err, docs) {
-		console.log(err);
-		console.log(docs);
 		utils.handleError(err);
 		var projects = docs.projects;
 		response.json({success: true, projects: projects});
@@ -31,9 +29,9 @@ router.post('/', utils.loggedIn, function(request, response) {
 		utils.handleError(err);
 		//if (data.users) {data.users.push(docs.leader);}//leader is a member of the project
 		//for (var i = 0; i < data.users.length; i++) {
+		var leader = docs.leader;
 		console.log(leader);
 		User.update({username: leader}, {$push: {projects: docs._id}}, function (err, docs){
-			console.log(err);
 			utils.handleError(err);
 		});
 		//}
