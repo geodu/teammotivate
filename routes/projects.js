@@ -18,23 +18,23 @@ router.get('/', utils.loggedIn, function(request, response) {
 router.post('/', utils.loggedIn, function(request, response) {
 	var data = request.body;
 	console.log(data);
+	var user = request.user.username;
+	if (data.users) {data.users.push(user);}
 	var proj = new Project({
 		name: data.name,
-	  leader: request.user.username,
+	  leader: user,
 	  description: data.description,
 	  users: data.users,
 	  tasks: []
 	});
 	proj.save(function (err, docs) {
 		utils.handleError(err);
-		//if (data.users) {data.users.push(docs.leader);}//leader is a member of the project
-		//for (var i = 0; i < data.users.length; i++) {
-		var leader = docs.leader;
-		console.log(leader);
-		User.update({username: leader}, {$push: {projects: docs._id}}, function (err, docs){
-			utils.handleError(err);
-		});
-		//}
+		console.log(docs.users);
+		for (var i = 0; i < docs.users.length; i++) {
+			User.update({username: docs.users[i]}, {$push: {projects: docs._id}}, function (err, docs){
+				utils.handleError(err);
+			});
+		}
 		response.json({success: true, id: docs._id});
 	});
 });
