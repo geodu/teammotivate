@@ -74,6 +74,11 @@ function($stateProvider, $urlRouterProvider) {
     	templateUrl: '/views/newUser.html',
     	controller: 'NewUsersCtrl'
     })
+    .state('sessions', {
+    	url: '/sessions',
+    	templateUrl: '/views/login.html',
+    	controller: 'SessionCtrl'
+    })
     .state('projects', {
 		  url: '/projects/{id}',
 		  templateUrl: '/views/projects.html',
@@ -101,6 +106,7 @@ function($stateProvider, $urlRouterProvider) {
   	console.log(userData);
   	return $http.post('/users', userData).success(function(data) {
   		console.log(data);
+  		angular.copy(data, o.success);
   	})
   }
   return o;
@@ -110,20 +116,6 @@ function($stateProvider, $urlRouterProvider) {
   var o = {
     projects: []
   };
-  var data = {
-  	username: 'dchoi2',
-  	password: 'asdfasdf'
-  }
-  console.log(data);
-
-$http.post('/sessions', data).error(function(message, status, headers, config) {
-  console.log(message);
-  console.log(status);
-  console.log(headers);
-  console.log(config);
-}).success(function(response) {
-  	console.log(response);
-  });
   
   o.getAll = function() {
     return $http.get('/projects').success(function(data){
@@ -159,6 +151,34 @@ $http.post('/sessions', data).error(function(message, status, headers, config) {
 			}
 			console.log(newUser);
 			users.post(newUser);
+			$scope.name='';
+			$scope.password='';
+		}
+	}
+])
+.controller('SessionCtrl', [
+	'$http',
+	'$scope',
+	'$location',
+	function($http, $scope, $location) {
+
+		$scope.authenticate = function() {
+			var user = '';
+			if ($scope.name === '') { return; }
+			var userFields = {
+				username: $scope.name,
+				password: $scope.password
+			}
+			console.log(userFields);
+			$http.post('/sessions', userFields).success(function(response) {
+			  	console.log(response);
+			  	if (response.success === true) {
+			  		user = $scope.name;
+			  	}
+			  });
+			$scope.name='';
+			$scope.password='';
+			$location.path('home');
 		}
 	}
 ])
@@ -168,22 +188,15 @@ $http.post('/sessions', data).error(function(message, status, headers, config) {
 	function($scope, projects){
 	console.log(projects);
 	$scope.projects = projects.projects;
-	$scope.projects.push({
-	  title: $scope.title,
-	  link: $scope.link,
-	  upvotes: 0,
-	  comments: [
-	    {author: 'Joe', body: 'Cool post!', upvotes: 0},
-	    {author: 'Bob', body: 'Great idea but everything is wrong!', upvotes: 0}
-	  ]
-	});
-	$scope.projects = [
-	  {title: 'post 1', upvotes: 5},
-	  {title: 'post 2', upvotes: 2},
-	  {title: 'post 3', upvotes: 15},
-	  {title: 'post 4', upvotes: 9},
-	  {title: 'post 5', upvotes: 4}
-	];
+	// $scope.projects.push({
+	//   title: $scope.title,
+	//   link: $scope.link,
+	//   upvotes: 0,
+	//   comments: [
+	//     {author: 'Joe', body: 'Cool post!', upvotes: 0},
+	//     {author: 'Bob', body: 'Great idea but everything is wrong!', upvotes: 0}
+	//   ]
+	// });
 
 	$scope.incrementUpvotes = function(post) {
 	  post.upvotes += 1;
@@ -196,6 +209,7 @@ $http.post('/sessions', data).error(function(message, status, headers, config) {
 	    link: $scope.link,
 	    upvotes: 0
 	  });
+	  //reset values
 	  $scope.title = '';
 	  $scope.link = '';
 	};
@@ -210,7 +224,7 @@ $http.post('/sessions', data).error(function(message, status, headers, config) {
 		$scope.post = projects.projects[$stateParams.id];
 		console.log(projects.projects);
 		console.log($scope);
-		$scope.addComment = function(){
+		$scope.addTask = function(){
 		  if($scope.body === '') { return; }
 		  $scope.project.comments.push({
 		    body: $scope.body,

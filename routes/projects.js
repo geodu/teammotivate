@@ -7,10 +7,25 @@ var utils = require('../utils');
 // Returns all the projects accessible to a user.
 router.get('/', utils.loggedIn, function(request, response) {
 	var username = request.user.username;
+	var userProjects = [];
 	User.findOne({username: username}, function(err, docs) {
 		utils.handleError(err);
+		if (!docs) {
+			response.json({success: false, message: 'Not a user'});
+		}
 		var projects = docs.projects;
-		response.json({success: true, projects: projects});
+		if (projects.length === 0) {
+			response.json({success: true, projects: userProjects});
+		}
+		else {
+			Project.find({_id: {$in: projects}}, function(err, proj) {
+				utils.handleError(err);
+				for (var i = 0; i< proj.length; i++ ) {
+					userProjects.push(proj[i]);
+				}
+				response.json({success: true, projects: userProjects});
+			});
+		}
 	});
 });
 
