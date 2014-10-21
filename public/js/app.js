@@ -98,6 +98,7 @@ function($stateProvider, $urlRouterProvider) {
 
   o.post = function(userData) {
   	console.log('in user post');
+  	console.log(userData);
   	return $http.post('/users', userData).success(function(data) {
   		console.log(data);
   	})
@@ -133,7 +134,7 @@ $http.post('/sessions', data).error(function(message, status, headers, config) {
   };
   return o;
 }])
-.controller('UsersCtrl', [	//users.get called by router beforehand so users is filled
+.controller('UsersCtrl', [
 	'$http',
 	'$scope',
 	'users',
@@ -143,10 +144,12 @@ $http.post('/sessions', data).error(function(message, status, headers, config) {
 	}
 ])
 .controller('NewUsersCtrl', [
+	'$http',
 	'$scope',
 	'users',
-	function($scope, users) {
+	function($http, $scope, users) {
 		console.log(users);
+		$scope.users = users.users;
 
 		$scope.addUser = function() {
 			if ($scope.name === '') { return; }
@@ -155,15 +158,7 @@ $http.post('/sessions', data).error(function(message, status, headers, config) {
 				password: $scope.password
 			}
 			console.log(newUser);
-			users.post('/users', newUser).error(function(message, status, headers, config) {
-			  console.log(message);
-			  console.log(status);
-			  console.log(headers);
-			  console.log(config);
-			}).success(function(response) {
-					$scope.users.push($scope.username);
-			  	console.log(response);
-			  });
+			users.post(newUser);
 		}
 	}
 ])
