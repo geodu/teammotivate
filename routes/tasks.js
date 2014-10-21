@@ -9,10 +9,13 @@ var utils = require('../utils');
 // Returns all the tasks that a user is responsible for.
 router.get('/:id/tasks', utils.loggedIn, function(request, response) {
 	var userTasks = [];
-	Projects.findOne({ _id: request.params.id }, function(projectErr, project) {
-		utils.handleError(projectErr);
+	Projects.findOne({ _id: request.params.id }, function(projErr, project) {
+		utils.handleError(projErr);
 		if (!project) {
-			response.json({success:false, message: 'Project ' + request.params.id + ' cannot be found'})
+			response.json({
+				success: false,
+				message: 'Project ' + request.params.id + ' cannot be found'
+			});
 		}
 		else {
 			var taskIdList = project.tasks;
@@ -36,10 +39,13 @@ router.get('/:id/tasks', utils.loggedIn, function(request, response) {
 
 // Create a new task.
 router.post('/:id/tasks', utils.loggedIn, function(request, response) {
-	Projects.findOne( {_id: request.params.id}, function(projectErr, project) {
-		utils.handleError(projectErr);
+	Projects.findOne( {_id: request.params.id}, function(projErr, project) {
+		utils.handleError(projErr);
 		if (!project) {
-			response.json({success: false, message: 'Project ' + request.params.id + ' cannot be found'});
+			response.json({
+				success: false,
+				message: 'Project ' + request.params.id + ' cannot be found'
+			});
 		}
 		else if (project.leader === request.user.username) {
 			var newDeadline = new Date(request.body.deadline);
@@ -51,9 +57,11 @@ router.post('/:id/tasks', utils.loggedIn, function(request, response) {
 		  });
 		  newTask.save(function(error) {
 		  	utils.handleError(error);
-		 		Projects.update({ _id: request.params.id }, { $push: { tasks: newTask._id }}, function(err) {
+		 		Projects.update({ _id: request.params.id },
+		 			{ $push: {tasks: newTask._id}}, function(err) {
 		 			utils.handleError(err);
-		 			Users.update({ username: request.body.assignee}, { $push: { tasks: newTask._id }}, function(err) {
+		 			Users.update({ username: request.body.assignee},
+		 				{ $push: { tasks: newTask._id }}, function(err) {
 			 			utils.handleError(err);
 			 			response.json({success: true});
 		 			});
@@ -61,7 +69,10 @@ router.post('/:id/tasks', utils.loggedIn, function(request, response) {
 			});
 		}
 		else {
-			response.json({success: false, message: 'User logged in is not the project leader'});
+			response.json({
+				success: false,
+				message: 'User logged in is not the project leader'
+			});
 		}
 	});
 });
@@ -82,7 +93,10 @@ router.get('/:id1/tasks/:id2', function(request, response) {
 			});
   	}
   	else {
-  		response.json({ success: false, message: 'User does not belong in project' + request.params.id1 });
+  		response.json({
+  			success: false,
+  			message: 'User does not belong in project' + request.params.id1
+  		});
   	}
   });
 });
@@ -115,8 +129,8 @@ router.post('/:id1/tasks/:id2', function(request, response) {
 			editTask();
 		}
 		else {
-			Projects.findOne( {_id:request.params.id1 }, function(projectErr, project) {
-				utils.handleError(projectErr);
+			Projects.findOne( {_id:request.params.id1 }, function(projErr, project) {
+				utils.handleError(projErr);
 				if (!project) {
 					response.json({success: false, message: 'Project cannot be found'});
 				}
@@ -124,7 +138,10 @@ router.post('/:id1/tasks/:id2', function(request, response) {
 					editTask();
 				}
 				else {
-					response.json({success:false, message: 'User is not the project leader or the task assignee'});
+					response.json({
+						success:false,
+						message: 'User is not the project leader or the task assignee'
+					});
 				}
 			});
 		}
@@ -133,8 +150,8 @@ router.post('/:id1/tasks/:id2', function(request, response) {
 
 // Delete a task.
 router.delete('/:id1/tasks/:id2', utils.loggedIn, function(request, response) {
-	Projects.findOne( { _id: request.params.id1 }, function(projectErr, project) {
-		utils.handleError(projectErr);
+	Projects.findOne( { _id: request.params.id1 }, function(projErr, project) {
+		utils.handleError(projErr);
 		if (!project) {
 			response.json({success: false, message: 'Project cannot be found'});
 		}
@@ -146,9 +163,11 @@ router.delete('/:id1/tasks/:id2', utils.loggedIn, function(request, response) {
 				}
 				Tasks.remove({ _id: request.params.id2 }, function(err) {
 					utils.handleError(err);
-					Projects.update({ _id: request.params.id1 }, { $pull: { tasks: request.params.id2 }}, function(err) {
+					Projects.update({ _id: request.params.id1 },
+						{ $pull: { tasks: request.params.id2 }}, function(err) {
 			 			utils.handleError(err);
-			 			Users.update({ username: task.assignee}, { $pull: { tasks: request.params.id2 }}, function(err) {
+			 			Users.update({ username: task.assignee},
+			 				{ $pull: { tasks: request.params.id2 }}, function(err) {
 				 			utils.handleError(err);
 				 			response.json({success: true});
 			 			});
@@ -157,7 +176,10 @@ router.delete('/:id1/tasks/:id2', utils.loggedIn, function(request, response) {
 			});
 		}
 		else {
-			response.json({success: false, message: 'User logged in is not the project leader'});
+			response.json({
+				success: false,
+				message: 'User logged in is not the project leader'
+			});
 		}
 	});
 });

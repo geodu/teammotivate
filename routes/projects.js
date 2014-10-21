@@ -35,8 +35,9 @@ router.post('/', utils.loggedIn, function(request, response) {
 	proj.save(function(err, docs) {
 		utils.handleError(err);
 		for (var i = 0; i < docs.users.length; i++) {
-			User.update({username: docs.users[i]}, {$push: {projects: docs._id}}, function (err, docs) {
-				utils.handleError(err);
+			User.update({username: docs.users[i]}, {$push: {projects: docs._id}},
+				function (err, docs) {
+					utils.handleError(err);
 			});
 		}
 		response.json({success: true, id: docs._id});
@@ -80,24 +81,33 @@ router.post('/:id', utils.loggedIn, function(request, response) {
 		return;
 	}
 
-	Project.findOneAndUpdate({_id: id, leader: username}, {$set: {name: name, description: description, leader: leader, users: users}}, function(err, proj) {
+	Project.findOneAndUpdate({_id: id, leader: username}, {$set: {
+			name: name,
+			description: description,
+			leader: leader,
+			users: users
+		}}, function(err, proj) {
 		utils.handleError(err);
 		if (!proj) {
-			response.json({success: false, message: 'Only the team leader can edit a project'});
+			response.json({
+				success: false,
+				message: 'Only the team leader can edit a project'});
 			return;
 		}
 		else {
 			for (var i = 0; i < proj.users.length; i++) {
 				if (users.indexOf(proj.users[i]) === -1) {
-					User.update({username: proj.users[i]}, {$pull: {projects: id}}, function (err, docs) {
-						utils.handleError(err);
+					User.update({username: proj.users[i]}, {$pull: {projects: id}},
+						function (err, docs) {
+							utils.handleError(err);
 					});
 				}
 			}
 			for (var i = 0; i < users.length; i++) {
 				if (proj.users.indexOf(users[i]) === -1) {
-					User.update({username: users[i]}, {$push: {projects: id}}, function (err, docs) {
-						utils.handleError(err);
+					User.update({username: users[i]}, {$push: {projects: id}},
+						function (err, docs) {
+							utils.handleError(err);
 					});
 				}
 			}
@@ -118,8 +128,9 @@ router.delete('/:id', utils.loggedIn, function(request, response) {
 		else if (proj.leader === username) {
 			proj.remove();
 			for (var i = 0; i < proj.users.length; i++) {
-				User.update({username: proj.users[i]}, {$pull: {projects: proj._id}}, function (err, docs) {
-					utils.handleError(err);
+				User.update({username: proj.users[i]}, {$pull: {projects: proj._id}},
+					function (err, docs) {
+						utils.handleError(err);
 				});
 			}
 			response.json({success: true});
