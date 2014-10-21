@@ -1,0 +1,24 @@
+.cell {
+    display : inline-block;
+}
+
+.cell {
+    height: 60px;
+    width: 60px;
+    background-color: black;
+}
+
+.cell.alive {
+	background-color: green;
+}
+
+.row {
+	border:none;
+	padding:none;
+}
+
+#grid {
+	height:600px;
+	width: 600px; 
+	font-size: 0px;
+}
