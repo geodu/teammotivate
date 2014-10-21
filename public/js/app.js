@@ -65,9 +65,14 @@ function($stateProvider, $urlRouterProvider) {
     	controller: 'UsersCtrl',
     	resolve: {
 			  postPromise: ['users', function(users){
-			    return users.getAll();
+			    return users.get();
 			  }]
 			}
+    })
+    .state('newUser', {
+    	url: '/users/new',
+    	templateUrl: '/views/newUser.html',
+    	controller: 'NewUsersCtrl'
     })
     .state('projects', {
 		  url: '/projects/{id}',
@@ -78,17 +83,25 @@ function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('home');
 }])
 .factory('users', ['$http', function($http){
+
   var o = {
     users: []
   };
   
-  o.getAll = function() {
-  	console.log('in user factory');
+  o.get = function() {
+  	console.log('in user get');
     return $http.get('/users').success(function(data){
       angular.copy(data, o.users);
       console.log(o.users);
     });
   };
+
+  o.post = function(userData) {
+  	console.log('in user post');
+  	return $http.post('/users', userData).success(function(data) {
+  		console.log(data);
+  	})
+  }
   return o;
 }])
 
@@ -120,12 +133,38 @@ $http.post('/sessions', data).error(function(message, status, headers, config) {
   };
   return o;
 }])
-.controller('UsersCtrl', [
+.controller('UsersCtrl', [	//users.get called by router beforehand so users is filled
+	'$http',
+	'$scope',
+	'users',
+	function($http, $scope, users) {
+		console.log(users.users);
+		$scope.users = users.users;
+	}
+])
+.controller('NewUsersCtrl', [
 	'$scope',
 	'users',
 	function($scope, users) {
-		console.log(users.users);
-		$scope.users = users.users;
+		console.log(users);
+
+		$scope.addUser = function() {
+			if ($scope.name === '') { return; }
+			var newUser = {
+				username: $scope.name,
+				password: $scope.password
+			}
+			console.log(newUser);
+			users.post('/users', newUser).error(function(message, status, headers, config) {
+			  console.log(message);
+			  console.log(status);
+			  console.log(headers);
+			  console.log(config);
+			}).success(function(response) {
+					$scope.users.push($scope.username);
+			  	console.log(response);
+			  });
+		}
 	}
 ])
 .controller('MainCtrl', [
@@ -150,12 +189,6 @@ $http.post('/sessions', data).error(function(message, status, headers, config) {
 	  {title: 'post 4', upvotes: 9},
 	  {title: 'post 5', upvotes: 4}
 	];
-
-	$scope.addPost = function(){
-		if($scope.title === '') { return; }
-		$scope.projects.push({title: $scope.title, upvotes: 0});
-	  $scope.title = '';
-	};
 
 	$scope.incrementUpvotes = function(post) {
 	  post.upvotes += 1;
