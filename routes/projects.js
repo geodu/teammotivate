@@ -78,6 +78,10 @@ router.post('/:id', utils.loggedIn, function(request, response) {
 		response.json({success: false, message: 'Need to specify users'});
 		return;
 	}
+	if (!leader) {
+		response.json({success: false, message: 'Need to specify leader'});
+		return;
+	}
 
 	Project.findOneAndUpdate({_id: id, leader: username}, {$set: {name: name, description: description, leader: leader, users: users}}, function(err, proj) {
 		utils.handleError(err);
