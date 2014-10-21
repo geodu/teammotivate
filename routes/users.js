@@ -23,8 +23,11 @@ router.post('/', function(request, response) {
     else if (doc) {
       response.json({success: false, message: 'User already exists'});
     }
-    else if (request.body.password.length < 8) {
-      response.json({success: false, message: 'Password must be at least 8 characters'});
+    else if (!request.body.password || request.body.password.length < 8) {
+      response.json({
+        success: false,
+        message: 'Password must be at least 8 characters'
+      });
     }
     else {
       var newUser = new User({
