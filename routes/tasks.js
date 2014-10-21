@@ -20,7 +20,7 @@ router.get('/:id/tasks', utils.loggedIn, function(request, response) {
 				response.json({success: true, tasks: userTasks});
 			}
 			else {
-				Tasks.find({_id: { $in: taskIdList}}, function(taskErr, tasks){
+				Tasks.find({_id: { $in: taskIdList}}, function(taskErr, tasks) {
 					utils.handleError(taskErr);
 					for (var i = 0; i< tasks.length; i++) {
 						if (tasks[i].assignee === request.user.username) {
@@ -39,7 +39,7 @@ router.post('/:id/tasks', utils.loggedIn, function(request, response) {
 	Projects.findOne( {_id: request.params.id}, function(projectErr, project) {
 		utils.handleError(projectErr);
 		if (!project) {
-			response.json({success:false, message: 'Project ' + request.params.id + ' cannot be found'});
+			response.json({success: false, message: 'Project ' + request.params.id + ' cannot be found'});
 		}
 		else if (project.leader === request.user.username) {
 			var newDeadline = new Date(request.body.deadline);
@@ -68,7 +68,6 @@ router.post('/:id/tasks', utils.loggedIn, function(request, response) {
 
 // Returns the task specified by an id.
 router.get('/:id1/tasks/:id2', function(request, response) {
-  //console.log(request.params);
   Users.findOne( {username: request.user.username}, function(userErr, user) {
   	utils.handleError(userErr);
   	if (user.projects.indexOf(request.params.id1) > -1) {
@@ -90,7 +89,7 @@ router.get('/:id1/tasks/:id2', function(request, response) {
 
 // Edit a task by overwriting the task associated with an id.
 router.post('/:id1/tasks/:id2', function(request, response) {
-	var editTask = function(){
+	var editTask = function() {
 		var newDeadline = new Date(request.body.deadline);
 		Tasks.update({ _id: request.params.id2 }, {
 			assignee: request.body.assignee,
