@@ -1,4 +1,48 @@
-angular.module('teamMotivate', ['ui.router'])
+angular.module('teamMotivate', ['ui.router'], function($httpProvider) {
+  // Use x-www-form-urlencoded Content-Type
+  $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+
+  /**
+   * The workhorse; converts an object to x-www-form-urlencoded serialization.
+   * @param {Object} obj
+   * @return {String}
+   */ 
+  var param = function(obj) {
+    var query = '', name, value, fullSubName, subName, subValue, innerObj, i;
+
+    for(name in obj) {
+      value = obj[name];
+
+      if(value instanceof Array) {
+        for(i=0; i<value.length; ++i) {
+          subValue = value[i];
+          fullSubName = name + '[' + i + ']';
+          innerObj = {};
+          innerObj[fullSubName] = subValue;
+          query += param(innerObj) + '&';
+        }
+      }
+      else if(value instanceof Object) {
+        for(subName in value) {
+          subValue = value[subName];
+          fullSubName = name + '[' + subName + ']';
+          innerObj = {};
+          innerObj[fullSubName] = subValue;
+          query += param(innerObj) + '&';
+        }
+      }
+      else if(value !== undefined && value !== null)
+        query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+    }
+
+    return query.length ? query.substr(0, query.length - 1) : query;
+  };
+
+  // Override $http service's default transformRequest
+  $httpProvider.defaults.transformRequest = [function(data) {
+    return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
+  }];
+})
 .config([
 '$stateProvider',
 '$urlRouterProvider',
@@ -10,10 +54,20 @@ function($stateProvider, $urlRouterProvider) {
       templateUrl: '/views/home.html',
       controller: 'MainCtrl',
       resolve: {
-		  postPromise: ['projects', function(projects){
-		    return projects.getAll();
-		  }]
-}
+			  postPromise: ['projects', function(projects){
+			    return projects.getAll();
+			  }]
+			}
+    })
+    .state('users', {
+    	url: '/users',
+    	templateUrl: '/views/users.html',
+    	controller: 'UsersCtrl',
+    	resolve: {
+			  postPromise: ['users', function(users){
+			    return users.getAll();
+			  }]
+			}
     })
     .state('projects', {
 		  url: '/projects/{id}',
@@ -23,32 +77,57 @@ function($stateProvider, $urlRouterProvider) {
 
   $urlRouterProvider.otherwise('home');
 }])
-.factory('projects', ['$http',function($http){
+.factory('users', ['$http', function($http){
+  var o = {
+    users: []
+  };
+  
+  o.getAll = function() {
+  	console.log('in user factory');
+    return $http.get('/users').success(function(data){
+      angular.copy(data, o.users);
+      console.log(o.users);
+    });
+  };
+  return o;
+}])
+
+.factory('projects', ['$http', function($http){
   var o = {
     projects: []
   };
-  $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
   var data = {
   	username: 'dchoi2',
   	password: 'asdfasdf'
   }
   console.log(data);
-  $http.post('/sessions', data).error(function(message, status, headers, config) {
-    console.log(message);
-    console.log(status);
-    console.log(headers);
-    console.log(config);
+
+$http.post('/sessions', data).error(function(message, status, headers, config) {
+  console.log(message);
+  console.log(status);
+  console.log(headers);
+  console.log(config);
+}).success(function(response) {
+  	console.log(response);
   });
-  // .success(function(response) {
-  // 	console.log(response);
-  // })
+  
   o.getAll = function() {
     return $http.get('/projects').success(function(data){
-      angular.copy(data, o.projects);
+  		console.log('in project factory');
+      angular.copy(data.projects, o.projects);
+      console.log(o.projects);
     });
   };
   return o;
 }])
+.controller('UsersCtrl', [
+	'$scope',
+	'users',
+	function($scope, users) {
+		console.log(users.users);
+		$scope.users = users.users;
+	}
+])
 .controller('MainCtrl', [
 	'$scope',
 	'projects',
@@ -105,7 +184,7 @@ function($stateProvider, $urlRouterProvider) {
 		console.log($scope);
 		$scope.addComment = function(){
 		  if($scope.body === '') { return; }
-		  $scope.post.comments.push({
+		  $scope.project.comments.push({
 		    body: $scope.body,
 		    author: 'user',
 		    upvotes: 0
