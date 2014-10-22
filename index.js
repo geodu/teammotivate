@@ -20,7 +20,7 @@ db.once('open', function callback () {
   console.log('connection successful');
 });
 
-var home = require('./routes/home');
+var pub = require('./routes/public');
 var projects = require('./routes/projects');
 var tasks = require('./routes/tasks');
 var users = require('./routes/users');
@@ -47,7 +47,7 @@ app.use('/projects', tasks);
 app.use('/projects', projects);
 app.use('/users', users);
 app.use('/sessions', sessions);
-app.use('/', home);
+app.use('/', pub);
 
 app.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,
   process.env.OPENSHIFT_NODEJS_IP);
