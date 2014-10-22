@@ -1,3 +1,7 @@
+/**
+ * Author: Michael Choi
+ */
+
 var express = require('express');
 var router = express.Router();
 var Project = require('../models/project').Project;
@@ -72,6 +76,10 @@ router.get('/:id', utils.loggedIn, function(request, response) {
 		}
   });
 });
+
+/**
+ * Authors: Michael Choi, George Du
+ */
 
 // Edit a project.
 router.post('/:id', utils.loggedIn, function(request, response) {

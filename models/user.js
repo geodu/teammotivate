@@ -1,4 +1,8 @@
-var mongoose = require("mongoose");
+/**
+ * Authors: George Du, Michael Choi, Rujia Zha
+ */
+
+ var mongoose = require("mongoose");
 
 var userSchema = new mongoose.Schema({
   username: String,

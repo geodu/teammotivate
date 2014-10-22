@@ -1,3 +1,7 @@
+/**
+ * Author: George Du
+ */
+
 var express = require('express');
 var path = require('path');
 var app = express();

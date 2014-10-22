@@ -1,3 +1,7 @@
+/**
+ * Author: George Du
+ */
+
 var express = require('express');
 var User = require('../models/user').User;
 

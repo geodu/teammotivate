@@ -1,3 +1,7 @@
+/**
+ * Author: George Du
+ */
+
 var loggedIn = function(request, response, next) {
   if (request.user) {
     next();
