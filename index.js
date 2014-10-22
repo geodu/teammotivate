@@ -17,7 +17,8 @@ require('./config/passport')(passport, User, LocalStrategy);
 
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/teammotivate');
+var connectionString = process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost/teammotivate';
+mongoose.connect(connectionString);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
