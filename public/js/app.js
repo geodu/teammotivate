@@ -83,10 +83,18 @@ function($stateProvider, $urlRouterProvider) {
 		  url: '/projects/{id}',
 		  templateUrl: '/views/projects.html',
 		  controller: 'ProjectsCtrl'
-		});
+		})
+		.state('newProject', {
+    	url: '/projects/new',
+    	templateUrl: '/views/newProject.html',
+    	controller: 'NewProjectsCtrl'
+    });
 
   $urlRouterProvider.otherwise('home');
 }])
+.factory("session",function(){
+  return {};
+})
 .factory('users', ['$http', function($http){
 
   var o = {
@@ -119,11 +127,20 @@ function($stateProvider, $urlRouterProvider) {
   
   o.getAll = function() {
     return $http.get('/projects').success(function(data){
-  		console.log('in project factory');
+  		console.log('in project get');
       angular.copy(data.projects, o.projects);
       console.log(o.projects);
     });
   };
+
+	o.post = function(projData) {
+		console.log('in project post');
+		console.log(projData);
+		return $http.post('/projects', projData).success(function(data) {
+			console.log(data);
+			angular.copy(data.projects, o.projects);
+		})
+	}
   return o;
 }])
 .controller('UsersCtrl', [
@@ -139,20 +156,24 @@ function($stateProvider, $urlRouterProvider) {
 	'$http',
 	'$scope',
 	'users',
-	function($http, $scope, users) {
+	'session',
+	function($http, $scope, users, session) {
 		console.log(users);
 		$scope.users = users.users;
 
 		$scope.addUser = function() {
 			if ($scope.name === '') { return; }
+			console.log($scope);
 			var newUser = {
 				username: $scope.name,
-				password: $scope.password
+				password: $scope.password,
+				department: $scope.department
 			}
 			console.log(newUser);
 			users.post(newUser);
 			$scope.name='';
 			$scope.password='';
+			$scope.department='';
 		}
 	}
 ])
@@ -160,10 +181,10 @@ function($stateProvider, $urlRouterProvider) {
 	'$http',
 	'$scope',
 	'$location',
-	function($http, $scope, $location) {
+	'session',
+	function($http, $scope, $location, session) {
 
 		$scope.authenticate = function() {
-			var user = '';
 			if ($scope.name === '') { return; }
 			var userFields = {
 				username: $scope.name,
@@ -173,7 +194,8 @@ function($stateProvider, $urlRouterProvider) {
 			$http.post('/sessions', userFields).success(function(response) {
 			  	console.log(response);
 			  	if (response.success === true) {
-			  		user = $scope.name;
+			  		session.name = userFields.username;
+			  		console.log(session);
 			  	}
 			  });
 			$scope.name='';
@@ -185,8 +207,11 @@ function($stateProvider, $urlRouterProvider) {
 .controller('MainCtrl', [
 	'$scope',
 	'projects',
-	function($scope, projects){
+	'session',
+	function($scope, projects, session){
 	console.log(projects);
+	console.log(session);
+	$scope.user = session.name;
 	$scope.projects = projects.projects;
 	// $scope.projects.push({
 	//   title: $scope.title,
@@ -197,10 +222,6 @@ function($stateProvider, $urlRouterProvider) {
 	//     {author: 'Bob', body: 'Great idea but everything is wrong!', upvotes: 0}
 	//   ]
 	// });
-
-	$scope.incrementUpvotes = function(post) {
-	  post.upvotes += 1;
-	};
 
 	$scope.addPost = function(){
 	  if($scope.title === '') { return; }
@@ -233,4 +254,28 @@ function($stateProvider, $urlRouterProvider) {
 		  });
 		  $scope.body = '';
 		};
-}]);
+}])
+.controller('NewProjectsCtrl', [
+	'$http',
+	'$scope',
+	'users',
+	'session',
+	function($http, $scope, users, session) {
+		console.log('in NewProjectsCtrl')
+		console.log(users);
+		$scope.users = users.users;
+
+		$scope.createProject = function() {
+			if ($scope.name === '') { return; }
+			var newProject = {
+				username: $scope.name,
+				password: $scope.password
+			}
+
+			console.log(newProject);
+			projects.post(newProject);
+			$scope.name='';
+			$scope.password='';
+		}
+	}
+]);

@@ -5,7 +5,7 @@
 
   <h2>Your Projects</h2>
 	<div ng-repeat="project in projects">
-	  <a ng-show="project._id" href="{{project._d}}">
+	  <a ng-show="project._id" href="projects/{{project._id}}">
 	    {{project.name}}
 	  </a>
 	  <span ng-hide="project._id">

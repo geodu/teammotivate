@@ -4,7 +4,7 @@ var User = require('../models/user').User;
 
 // Returns a list of all the users.
 router.get('/', function(request, response) {
-  User.find({}, 'username', function(err, docs) {
+  User.find({}, function(err, docs) {
     if (err) {
       response.send(err);
     }
@@ -33,6 +33,7 @@ router.post('/', function(request, response) {
       var newUser = new User({
         username: request.body.username,
         password: request.body.password,
+        department: request.body.department,
         projects: [],
         tasks: []
       });
