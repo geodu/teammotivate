@@ -102,7 +102,7 @@ router.get('/:id1/tasks/:id2', function(request, response) {
 });
 
 // Edit a task by overwriting the task associated with an id.
-router.post('/:id1/tasks/:id2', function(request, response) {
+router.put('/:id1/tasks/:id2', function(request, response) {
 	var editTask = function() {
 		var newDeadline = new Date(request.body.deadline);
 		Tasks.update({ _id: request.params.id2 }, {
