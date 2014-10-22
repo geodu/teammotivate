@@ -10,9 +10,6 @@ router.get('/', utils.loggedIn, function(request, response) {
 	var userProjects = [];
 	User.findOne({username: username}, function(err, docs) {
 		utils.handleError(err);
-		if (!docs) {
-			response.json({success: false, message: 'Not a user'});
-		}
 		var projects = docs.projects;
 		if (projects.length === 0) {
 			response.json({success: true, projects: userProjects});
@@ -95,7 +92,6 @@ router.post('/:id', utils.loggedIn, function(request, response) {
 		response.json({success: false, message: 'Need to specify leader'});
 		return;
 	}
-
 	Project.findOneAndUpdate({_id: id, leader: username}, {$set: {
 			name: name,
 			description: description,
