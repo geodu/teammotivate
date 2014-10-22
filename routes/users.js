@@ -1,16 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user').User;
+var utils = require('../utils');
 
 // Returns a list of all the users.
-router.get('/', function(request, response) {
-  User.find({}, 'username', function(err, docs) {
-    if (err) {
-      response.send(err);
-    }
-    else {
-      response.json(docs);
-    }
+router.get('/', utils.loggedIn, function(request, response) {
+  User.find({}, function(err, docs) {
+    utils.handleError(err);
+    response.json(docs);
   });
 });
 
@@ -33,6 +30,7 @@ router.post('/', function(request, response) {
       var newUser = new User({
         username: request.body.username,
         password: request.body.password,
+        department: request.body.department,
         projects: [],
         tasks: []
       });

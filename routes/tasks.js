@@ -78,7 +78,7 @@ router.post('/:id/tasks', utils.loggedIn, function(request, response) {
 });
 
 // Returns the task specified by an id.
-router.get('/:id1/tasks/:id2', function(request, response) {
+router.get('/:id1/tasks/:id2', utils.loggedIn, function(request, response) {
   Users.findOne( {username: request.user.username}, function(userErr, user) {
   	utils.handleError(userErr);
   	if (user.projects.indexOf(request.params.id1) > -1) {
@@ -102,7 +102,7 @@ router.get('/:id1/tasks/:id2', function(request, response) {
 });
 
 // Edit a task by overwriting the task associated with an id.
-router.put('/:id1/tasks/:id2', function(request, response) {
+router.put('/:id1/tasks/:id2', utils.loggedIn, function(request, response) {
 	var editTask = function() {
 		var newDeadline = new Date(request.body.deadline);
 		Tasks.update({ _id: request.params.id2 }, {
