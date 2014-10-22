@@ -3,11 +3,12 @@
  */
 
 (function() {
+  var connectionString = 'http://teammotivate-dug.rhcloud.com/';
 
   asyncTest('creating the same user again', function() {
     $.ajax({
       type: 'POST',
-      url: 'http://localhost:8080/users', 
+      url: connectionString + 'users', 
       dataType: 'json', 
       data: { username: 'testuser', password: 'asdfjkll' },
       success : function(data) {
@@ -24,7 +25,7 @@
   asyncTest('logging in user', function() {
     $.ajax({
       type: 'POST', 
-      url: 'http://localhost:8080/sessions',
+      url: connectionString + 'sessions',
       dataType: 'json',
       data: { username: 'testuser', password: 'asdfjkll' },
       success : function(data) {
@@ -41,7 +42,7 @@
   asyncTest('listing the users', function() {
     $.ajax({
       type: 'GET', 
-      url: 'http://localhost:8080/users', 
+      url: connectionString + 'users', 
       dataType: 'json',
       success : function(data) {
         console.log(data);
@@ -65,7 +66,7 @@
   asyncTest('creating a new project', function() {
     $.ajax({
       type: 'POST', 
-      url: 'http://localhost:8080/projects/',
+      url: connectionString + 'projects/',
       dataType: 'json', 
       data: { name: 'bake', description: 'birthday', users: ['rujia'] },
       success : function(data) {
@@ -83,7 +84,7 @@
   asyncTest('getting list of projects associated with user', function() {
     $.ajax({
       type: 'GET', 
-      url: 'http://localhost:8080/projects/', 
+      url: connectionString + 'projects/', 
       dataType: 'json', 
       success : function(data) {
         console.log(data);
@@ -100,7 +101,7 @@
   asyncTest('getting a specified project', function() {
     $.ajax({
       type: 'GET',
-      url: 'http://localhost:8080/projects/' + projectID,
+      url: connectionString + 'projects/' + projectID,
       dataType: 'json',
       success : function(data) {
         console.log(data);
@@ -117,7 +118,7 @@
   asyncTest('editing a specified project', function() {
     $.ajax({
       type: 'POST', 
-      url: 'http://localhost:8080/projects/' + projectID,
+      url: connectionString + 'projects/' + projectID,
       dataType: 'json',
       data: { leader: 'testuser', name: 'bake', description: 'birthday party', users: ['rujia'] },
       success : function(data) {
@@ -136,7 +137,7 @@
   asyncTest('create a new task for a specified project', function() {
     $.ajax({
       type: 'POST', 
-      url: 'http://localhost:8080/projects/' + projectID + '/tasks',
+      url: connectionString + 'projects/' + projectID + '/tasks',
       dataType: 'json', 
       data: { assignee: 'testuser', description: 'todo', completion: 0, deadline: 'October 13, 2014 11:13:00' },
       success : function(data) {
@@ -153,7 +154,7 @@
   asyncTest('get set of tasks assigned to the user for a specified project', function() {
     $.ajax({
       type: 'GET',
-      url: 'http://localhost:8080/projects/' + projectID + '/tasks',
+      url: connectionString + 'projects/' + projectID + '/tasks',
       dataType: 'json',
       success : function(data) {
         console.log(data);
@@ -171,7 +172,7 @@
   asyncTest('getting a specified task', function() {
     $.ajax({
       type: 'GET',
-      url: 'http://localhost:8080/projects/' + projectID + '/tasks/' + taskID,
+      url: connectionString + 'projects/' + projectID + '/tasks/' + taskID,
       dataType: 'json',
       success : function(data) {
         console.log(data);
@@ -188,7 +189,7 @@
   asyncTest('editing a specified task', function() {
     $.ajax({
       type: 'PUT', 
-      url: 'http://localhost:8080/projects/' + projectID + '/tasks/' + taskID,
+      url: connectionString + 'projects/' + projectID + '/tasks/' + taskID,
       dataType: 'json',
       data: { assignee: 'testuser', description: 'todo', completion: 2, deadline: 'October 16, 2014 11:13:00' },
       success : function(data) {
@@ -205,7 +206,7 @@
   asyncTest('deleting a specified task', function() {
     $.ajax({
       type: 'DELETE',
-      url: 'http://localhost:8080/projects/' + projectID + '/tasks/' + taskID,
+      url: connectionString + 'projects/' + projectID + '/tasks/' + taskID,
       dataType: 'json',
       success : function(data) {
         console.log(data);
@@ -221,7 +222,7 @@
   asyncTest('deleting a specified project', function() {
     $.ajax({
       type: 'DELETE',
-      url: 'http://localhost:8080/projects/' + projectID,
+      url: connectionString + 'projects/' + projectID,
       dataType: 'json',
       success : function(data) {
         console.log(data);
