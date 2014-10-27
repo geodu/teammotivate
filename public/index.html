@@ -7,17 +7,22 @@
     <script src="libs/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="libs/angular-route/angular-route.js"></script>
     <script src="libs/angular-resource/angular-resource.js"></script>
-    <script src="js/app.js"></script>
+    <script src="app/app.js"></script>
+    <script src="app/login/login.js"></script>
+    <script src="app/newUser/newUser.js"></script>
+    <script src="app/home/home.js"></script>
+    <script src="app/userlist/userlist.js"></script>
+    <script src="app/newProject/newProject.js"></script>
+    <script src="app/projectUpdate/projectUpdate.js"></script>
+    <script src="app/taskUpdate/taskUpdate.js"></script>
 
   </head>
   <body ng-app="teamMotivate" ng-controller="MainCtrl">
 		<table style="width: 100%">
 			<tbody><tr>
 				<td style="width: 15%; vertical-align: top; padding-top: 10px">
-					<div class="list-group">
-						<a href="#/" class="list-group-item active">Home</a> 
-						<a href="#/users/new" class="list-group-item">New User</a> 
-						<a href="#/sessions" class="list-group-item">Log In</a> 
+					<div ng-show="isLoggedIn()" class="list-group">
+						<a href="#/home" class="list-group-item active">Home</a>
 						<a href="#/users" class="list-group-item">All Users</a>
 						<a href="#/projects/new" class="list-group-item">Create Project</a>
 					</div>
@@ -27,7 +32,5 @@
 				<td>
 			</tr></tbody>
 		</table>
-
-
   </body>
 </html>

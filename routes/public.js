@@ -11,7 +11,7 @@ router.get('/test', function(request, response) {
 });
 
 router.get('/', function(request, response) {
-  response.sendFile(path.join(__dirname, '../public', '/views/index.html'));
+  response.sendFile(path.join(__dirname, '../public', '/index.html'));
 });
 
 module.exports = router;
