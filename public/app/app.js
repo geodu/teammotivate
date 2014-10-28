@@ -100,10 +100,20 @@ angular.module('teamMotivate', ['ui.router'], function($httpProvider) {
   };
 
   o.get = function(projID) {
-    return $http.get('/projects/'+projID+'tasks/').success(function(data) {
+    return $http.get('/projects/'+projID+'/tasks/').success(function(data) {
       console.log('in task get');
       angular.copy(data.tasks, o.tasks);
       console.log(o.tasks);
     });
   }
+
+  o.post = function(taskData, projID, taskID) {
+    console.log('in task post');
+    console.log(taskData);
+    return $http.post('/projects/'+projID+'tasks/'+taskID, taskData).success(function(data) {
+      console.log(data);
+      angular.copy(data.tasks, o.tasks);
+    });
+  }
+ return o;
 }])

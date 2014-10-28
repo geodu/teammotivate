@@ -11,14 +11,14 @@ angular.module('teamMotivate')
 .controller('TasksCtrl', [
   '$scope',
   '$stateParams',
-  'projects',
-  function($scope, $stateParams, projects) {
+  'tasks',
+  function($scope, $stateParams, tasks) {
     console.log(projects);
     console.log($stateParams);
     $scope.post = projects.projects[$stateParams.id];
     console.log(projects.projects);
     console.log($scope);
-    $scope.addTask = function() {
+    $scope.updateTask = function() {
       if ($scope.body === '') { return; }
       $scope.project.comments.push({
         body: $scope.body,

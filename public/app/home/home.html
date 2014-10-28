@@ -5,14 +5,25 @@
 
   <h2>Your Projects</h2>
 	<div ng-repeat="project in projects">
-	  <a ng-show="project._id" href="#/projects/{{project._id}}">
+	  <a ng-show="user === project.leader" href="#/projects/{{project._id}}">
 	    {{project.name}}
 	  </a>
-	  <span ng-hide="project._id">
+	  <span ng-show="user !== project.leader">
 	    {{project.name}}
 	  </span>
-<!-- 	   <span>
-		  <a href="#/projects/{{project._id}}">{{project.name}}</a>
-		</span>    -->
 	  - Leader: {{project.leader}}
+	  <span ng-show="tasks.project._id">
+	  	<br> Your Tasks:
+	  </span>
+	  <span ng-show="!tasks.project._id">
+	  	<br> You have no tasks for this project.
+	  </span>
+	  <div ng-repeat:"task in tasks.project._id">	  
+	  	<a ng-show="task._id" href="#/projects/{{project._id}}/tasks/{{task._id}}">
+			    {{task.description}}
+		  </a>
+		  <span ng-hide="project._id">
+			    {{task.description}}
+		  </span>
+	  </div>
 	</div>
