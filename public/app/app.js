@@ -107,12 +107,12 @@ angular.module('teamMotivate', ['ui.router'], function($httpProvider) {
     });
   }
 
-  o.post = function(taskData, projID, taskID) {
+  o.put = function(taskData, projID, taskID) {
     console.log('in task post');
     console.log(taskData);
-    return $http.post('/projects/'+projID+'tasks/'+taskID, taskData).success(function(data) {
+    return $http.put('/projects/'+projID+'tasks/'+taskID, taskData).success(function(data) {
       console.log(data);
-      angular.copy(data.tasks, o.tasks);
+      angular.copy(data.success, o.success);
     });
   }
  return o;
