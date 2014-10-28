@@ -33,7 +33,7 @@ angular.module('teamMotivate')
       var updatedTask = {
         assignee: $scope.task.assignee,
         description: $scope.task.description,
-        deadline: $scope.task.deadline,
+        deadline: $scope.task.deadline.toString(),
         completion: $scope.task.completion,
         etc: $scope.task.etc
       }

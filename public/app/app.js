@@ -136,7 +136,7 @@ angular.module('teamMotivate', ['ui.router', 'ngCookies'], function($httpProvide
   }
 
   o.put = function(taskData, projID, taskID) {
-    console.log('in task post');
+    console.log('in task put');
     console.log(taskData);
     return $http.put('/projects/'+projID+'/tasks/'+taskID, taskData).success(function(data) {
       console.log(data);
