@@ -15,8 +15,6 @@ angular.module('teamMotivate')
   'projects',
   'tasks',
   function($scope, $stateParams, users, projects, tasks) {
-    //$scope.project = projects.projects.filter(function(v) {return v._id === $stateParams.id})[0]
-    console.log($scope.project);
     projects.get($stateParams.id).then(
       function(result) {
         console.log(result.data);
