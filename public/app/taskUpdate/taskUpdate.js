@@ -2,7 +2,7 @@ angular.module('teamMotivate')
 
 .config(['$stateProvider', function($stateProvider) {
 	$stateProvider.state('taskUpdate', {
-      url: '/tasks/{id}',
+      url: '/{id1}/tasks/{id2}',
       templateUrl: '/app/taskUpdate/taskUpdate.html',
       controller: 'TasksCtrl'
     });
@@ -11,20 +11,24 @@ angular.module('teamMotivate')
 .controller('TasksCtrl', [
   '$scope',
   '$stateParams',
-  'projects',
-  function($scope, $stateParams, projects) {
-    console.log(projects);
+  'tasks',
+  function($scope, $stateParams, tasks) {
+    console.log(tasks);
     console.log($stateParams);
-    $scope.post = projects.projects[$stateParams.id];
-    console.log(projects.projects);
     console.log($scope);
-    $scope.addTask = function() {
+
+    $scope.updateTask = function() {
       if ($scope.body === '') { return; }
-      $scope.project.comments.push({
-        body: $scope.body,
-        author: 'user',
-        upvotes: 0
-      });
-      $scope.body = '';
-    };
+      var updatedTask = {
+        assignee: $scope.assignee,
+        description: $scope.description,
+        deadline: $scope.deadline,
+        completion: $scope.completion, 
+        etc: $scope.etc
+      }
+
+      console.log(updatedTask);
+      tasks.post(updatedTask, stateParams.id1, stateParams.id2);
+    }
 }])
+

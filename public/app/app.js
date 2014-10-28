@@ -84,6 +84,13 @@ angular.module('teamMotivate', ['ui.router'], function($httpProvider) {
     });
   };
 
+  o.get = function(id) {
+    return $http.get('/projects/'+id).success(function(data) {
+      angular.copy(data.projects, o.projects);
+      console.log(o.projects);
+    })
+  }
+
 	o.post = function(projData) {
 		console.log('in project post');
 		console.log(projData);
@@ -112,5 +119,15 @@ angular.module('teamMotivate', ['ui.router'], function($httpProvider) {
       console.log(data);
     });
   }
+
+  o.put = function(taskData, projID, taskID) {
+    console.log('in task post');
+    console.log(taskData);
+    return $http.put('/projects/'+projID+'tasks/'+taskID, taskData).success(function(data) {
+      console.log(data);
+      angular.copy(data.success, o.success);
+    });
+  }
+
   return o;
 }])

@@ -8,8 +8,7 @@ var userSchema = new mongoose.Schema({
   username: String,
   password: String,
   department: String,
-  projects: [String],
-  tasks: [String]
+  projects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project' }]
 });
 
 var user = mongoose.model('User', userSchema);
