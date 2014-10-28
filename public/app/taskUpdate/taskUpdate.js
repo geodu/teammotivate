@@ -29,11 +29,11 @@ angular.module('teamMotivate')
     $scope.updateTask = function() {
       if ($scope.body === '') { return; }
       var updatedTask = {
-        assignee: $scope.assignee,
-        description: $scope.description,
-        deadline: $scope.deadline,
-        completion: $scope.completion, 
-        etc: $scope.etc
+        assignee: $scope.task.assignee,
+        description: $scope.task.description,
+        deadline: $scope.task.deadline,
+        completion: $scope.task.completion, 
+        etc: $scope.task.etc
       }
 
       console.log(updatedTask);
