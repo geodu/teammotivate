@@ -12,8 +12,7 @@ var utils = require('../utils');
 
 // Returns all the tasks that a user is responsible for.
 router.get('/:id/tasks', utils.loggedIn, function(request, response) {
-	var userTasks = [];
-	Projects.findOne({ _id: request.params.id }, function(projErr, project) {
+	Projects.findOne({ _id: request.params.id }).populate('tasks').exec(function(projErr, project) {
 		utils.handleError(projErr);
 		if (!project) {
 			response.json({
@@ -22,21 +21,7 @@ router.get('/:id/tasks', utils.loggedIn, function(request, response) {
 			});
 		}
 		else {
-			var taskIdList = project.tasks;
-			if (taskIdList.length === 0) {
-				response.json({success: true, tasks: userTasks});
-			}
-			else {
-				Tasks.find({_id: { $in: taskIdList}}, function(taskErr, tasks) {
-					utils.handleError(taskErr);
-					for (var i = 0; i< tasks.length; i++) {
-						if (tasks[i].assignee === request.user.username) {
-							userTasks.push(tasks[i]);
-						}
-					}
-					response.json({success: true, tasks: userTasks});
-				});
-			}
+			response.json({success: true, tasks: project.tasks});
 		}
 	});
 });

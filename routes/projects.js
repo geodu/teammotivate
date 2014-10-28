@@ -7,26 +7,15 @@ var router = express.Router();
 var Project = require('../models/project').Project;
 var User = require('../models/user').User;
 var utils = require('../utils');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 // Returns all the projects accessible to a user.
 router.get('/', utils.loggedIn, function(request, response) {
 	var username = request.user.username;
-	var userProjects = [];
-	User.findOne({username: username}, function(err, docs) {
+	User.findOne({username: username}).populate('projects').exec(function(err, docs) {
 		utils.handleError(err);
 		var projects = docs.projects;
-		if (projects.length === 0) {
-			response.json({success: true, projects: userProjects});
-		}
-		else {
-			Project.find({_id: {$in: projects}}, function(err, proj) {
-				utils.handleError(err);
-				for (var i = 0; i< proj.length; i++ ) {
-					userProjects.push(proj[i]);
-				}
-				response.json({success: true, projects: userProjects});
-			});
-		}
+		response.json({success: true, projects: projects});
 	});
 });
 
