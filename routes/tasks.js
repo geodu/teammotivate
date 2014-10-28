@@ -56,7 +56,8 @@ router.post('/:id/tasks', utils.loggedIn, function(request, response) {
 			var newTask = new Tasks({
 		    assignee: request.body.assignee,
 		  	description: request.body.description,
-		  	completion: request.body.completion, 
+		  	completion: 0,
+		  	etc: request.body.etc,
 		  	deadline: new Date(request.body.deadline)
 		  });
 		  newTask.save(function(error) {
@@ -113,7 +114,9 @@ router.put('/:id1/tasks/:id2', utils.loggedIn, function(request, response) {
 			assignee: request.body.assignee,
 			description: request.body.description,
 			completion: request.body.completion,
-			deadline: newDeadline}, function(err, numAffected) {
+			etc: request.body.etc,
+			deadline: newDeadline
+		}, function(err, numAffected) {
 				utils.handleError(err);
 				if (numAffected === 0) {
 					response.json({ success: false, message: 'Task was not edited'});

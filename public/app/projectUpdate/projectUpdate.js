@@ -13,16 +13,8 @@ angular.module('teamMotivate')
   '$stateParams',
   'projects',
   function($scope, $stateParams, projects) {
-    $scope.post = projects.projects[$stateParams.id];
-    console.log(projects.projects);
-    console.log($scope);
+    $scope.project = projects.projects.filter(function(v) {return v._id === $stateParams.id})[0]
+    console.log($scope.project);
     $scope.addTask = function() {
-      if ($scope.body === '') { return; }
-      $scope.project.comments.push({
-        body: $scope.body,
-        author: 'user',
-        upvotes: 0
-      });
-      $scope.body = '';
     };
 }])
