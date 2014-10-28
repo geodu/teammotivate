@@ -35,6 +35,11 @@ angular.module('teamMotivate')
       // if (users.users.filter(function(v) {return v.username === $scope.assignee}).length === 0) {
       //   return;
       // }
+      if (!$scope.deadline) {
+        $scope.message = 'Need a deadline';
+        return;
+      }
+      $scope.message = '';
       var newTask = {
         assignee: $scope.assignee,
         description: $scope.description,
@@ -45,11 +50,17 @@ angular.module('teamMotivate')
       console.log(newTask);
 
       tasks.addTask($stateParams.id, newTask).then(
-        function() {
-          projects.get($stateParams.id).then(
-            function(result) {
-              formatProject(result);
-            });
+        function(results) {
+          var success = results.data.success;
+          if (success) {
+            projects.get($stateParams.id).then(
+              function(result) {
+                formatProject(result);
+              });
+          }
+          else {
+            $scope.message = results.data.message;
+          }
         });
 
       //$scope.project.tasks.push(newTask);
@@ -70,9 +81,17 @@ angular.module('teamMotivate')
         users: $scope.project.users
       }
 
-      projects.update($stateParams.id, updatedProj);
-      $scope.projName = '';
-      $scope.projDescription = '';
+      projects.update($stateParams.id, updatedProj).then(
+        function(results) {
+          var success = results.data.success;
+          console.log(success);
+          if (!results.data.success) {
+            console.log(results.data.message);
+            $scope.message = results.data.message;
+          }
+          $scope.projName = '';
+          $scope.projDescription = '';
+        });
     };
 
     $scope.deleteTask = function(projID, taskID) {
