@@ -52,16 +52,16 @@ router.post('/', utils.loggedIn, function(request, response) {
 // Returns the project specified by an id.
 router.get('/:id', utils.loggedIn, function(request, response) {
   var id = request.params.id;
-  Project.findOne({_id: id}, function(err, docs) {
+  Project.findOne({_id: id}).populate('tasks').exec(function(err, doc) {
 		utils.handleError(err);
-		if (!docs) {
+		if (!doc) {
 			response.json({success: false, message: 'No project found'});
 		}
-		else if (docs.users.indexOf(request.user.username) === -1) {
+		else if (doc.users.indexOf(request.user.username) === -1) {
 			response.json({success: false, message: 'Not a member of the project'});
 		}
 		else {
-			response.json({success: true, project: docs});
+			response.json({success: true, project: doc});
 		}
   });
 });
