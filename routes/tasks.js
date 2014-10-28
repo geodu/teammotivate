@@ -35,8 +35,9 @@ router.post('/:id/tasks', utils.loggedIn, function(request, response) {
 		response.json({success: false, message: 'Need to specify all fields'});
 		return;
 	}
-	if (Number(request.body.etc) === NAN) {
+	if (!Number(request.body.etc)) {
 		response.json({success: false, message: "etc must be a number"});
+		return;
 	}
 	Projects.findOne( {_id: request.params.id}, function(projErr, project) {
 		utils.handleError(projErr);
@@ -104,8 +105,13 @@ router.put('/:id1/tasks/:id2', utils.loggedIn, function(request, response) {
 		response.json({success: false, message: 'Need to specify all fields'});
 		return;
 	}	
-	if (Number(request.body.etc) === NAN || Number(request.body.completion === Number)) {
-		response.json({success: false, message: "etc must be a number"});
+	if (!Number(request.body.etc)|| !Number(request.body.completion)) {
+		response.json({success: false, message: "etc and completion must be a number"});
+		return;
+	}
+	if (Number(request.body.completion) > 100 || Number(request.body.completion) < 0) {
+		response.json({success: false, message: "Completion must be a number between 0 and 100"});
+		return;
 	}
 	var editTask = function() {
 		var newDeadline = new Date(request.body.deadline);

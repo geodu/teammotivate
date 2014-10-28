@@ -39,7 +39,15 @@ angular.module('teamMotivate')
       }
 
       console.log(updatedTask);
-      tasks.put(updatedTask, $stateParams.id1, $stateParams.id2);
-      $location.path('home');
+      tasks.put(updatedTask, $stateParams.id1, $stateParams.id2).then(
+        function(result) {
+          var success = result.data.success;
+            if (success) {
+              $location.path('home');
+            }
+            else {
+              $scope.message = result.data.message;
+            }
+        });
     }
 }])

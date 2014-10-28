@@ -34,10 +34,16 @@ angular.module('teamMotivate')
       }
 
       console.log(newProject);
-      projects.post(newProject);
-      $scope.name = '';
-      $scope.password = '';
-      $location.path('home');
+      projects.post(newProject).then(
+        function(result) {
+          var success = result.data.success;
+            if (success) {
+              $location.path('home');
+            }
+            else {
+              $scope.message = result.data.message;
+            }
+        });;
     }
 
     $scope.addUser = function() {
