@@ -46,6 +46,15 @@ angular.module('teamMotivate')
       })(i);
     }
 
+    $scope.deleteProject = function(projID) {
+      projects.delete(projID);
+      projects.get($stateParams.id).then(
+        function(result) {
+          formatProject(result);
+        });
+      //$scope.project.tasks.remove(newTask);
+    }
+
     $scope.isLoggedIn = function() {
       return session.name() !== undefined;
     }

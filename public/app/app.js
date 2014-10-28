@@ -115,6 +115,11 @@ angular.module('teamMotivate', ['ui.router', 'ngCookies','ngTable'], function($h
       angular.copy(data.projects, o.projects);
     });
   }
+  o.delete = function(projID) {
+    return $http.delete('/projects/'+projID).success(function(data) {
+      console.log(data);
+    })
+  }
   return o;
 }])
 .factory('tasks', ['$http', function($http) {

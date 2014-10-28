@@ -16,9 +16,10 @@ angular.module('teamMotivate')
 .controller('UsersCtrl', [
   '$http',
   '$scope',
+  '$filter',
   'users',
-  'ngTable',
-  function($http, $scope, users) {
+  'ngTableParams',
+  function($http, $scope, $filter, users, ngTableParams  ) {
     $scope.users = users.users;
 
     $scope.tableParams = new ngTableParams({
@@ -32,9 +33,8 @@ angular.module('teamMotivate')
         getData: function($defer, params) {
             // use build-in angular filter
             var orderedData = params.sorting() ?
-                                $filter('orderBy')(data, params.orderBy()) :
-                                data;
-
+                                $filter('orderBy')($scope.users, params.orderBy()) :
+                                $scope.users;
             $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
         }
     });

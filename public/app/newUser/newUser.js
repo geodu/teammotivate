@@ -24,11 +24,20 @@ angular.module('teamMotivate')
 			}
 			console.log(newUser);
       console.log(users);
-			users.post(newUser);
+			users.post(newUser).then(
+				function (results) {
+					console.log(results);
+					var success = results.data.success;
+					if (success) {
+						$location.path('sessions');
+					}
+					else {
+						$scope.message = results.data.message;
+					}
+				});
 			$scope.name = '';
 			$scope.password = '';
 			$scope.department = '';
-      $location.path('sessions');
 		}
 	}
 ])

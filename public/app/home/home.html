@@ -11,6 +11,7 @@
 	  <div ng-show="user !== project.leader">
 	    {{project.name}}
 	  </div>
+	  <div ng-show="user === project.leader" style="display:inline-block" class="pull-right" ng-click="deleteProject(project._id)">X</div>
 	  Leader: {{project.leader}}
 	  <div ng-show="tasks" class="progress" style="width:60%">
 		  <div class="progress-bar" role="progressbar" aria-valuenow="{{project.completion}}" aria-valuemin="0" aria-valuemax="100"
