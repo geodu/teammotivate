@@ -9,6 +9,10 @@
 		"angular-route": "latest",
 		"angular-ui-router": "latest",
 		"angular-resource": "latest",
+<<<<<<< Updated upstream
 		"angular-cookies": "latest"
+=======
+		"ng-table": "latest"
+>>>>>>> Stashed changes
 	}
 }

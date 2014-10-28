@@ -1,4 +1,4 @@
-angular.module('teamMotivate', ['ui.router', 'ngCookies'], function($httpProvider) {
+angular.module('teamMotivate', ['ui.router', 'ngCookies','ngTable'], function($httpProvider) {
   // Use x-www-form-urlencoded Content-Type
   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
   $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';

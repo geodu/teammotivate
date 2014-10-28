@@ -17,8 +17,26 @@ angular.module('teamMotivate')
   '$http',
   '$scope',
   'users',
+  'ngTable',
   function($http, $scope, users) {
-    console.log(users.users);
     $scope.users = users.users;
+
+    $scope.tableParams = new ngTableParams({
+        page: 1,            // show first page
+        count: 10,          // count per page
+        sorting: {
+            name: 'asc'     // initial sorting
+        }
+    }, {
+        total: $scope.users.length, // length of data
+        getData: function($defer, params) {
+            // use build-in angular filter
+            var orderedData = params.sorting() ?
+                                $filter('orderBy')(data, params.orderBy()) :
+                                data;
+
+            $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        }
+    });
   }
 ])

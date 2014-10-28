@@ -1,6 +1,13 @@
   <div class="page-header">
     <h1>List of Users</h1>
   </div>
-	<div ng-repeat="user in users">
-		{{user.username}} {{user.department}}
-	</div>
+  <table ng-table="tableParams" class="table">
+      <tr ng-repeat="user in users">
+          <td data-title="'Name'" sortable="'name'">
+              {{user.name}}
+          </td>
+          <td data-title="'Age'" sortable="'age'">
+              {{user.age}}
+          </td>
+      </tr>
+  </table>
