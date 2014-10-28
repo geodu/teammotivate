@@ -11,8 +11,9 @@ angular.module('teamMotivate')
 .controller('TasksCtrl', [
   '$scope',
   '$stateParams',
+  '$location',
   'tasks',
-  function($scope, $stateParams, tasks) {
+  function($scope, $stateParams, $location, tasks) {
     console.log(tasks);
     console.log($stateParams);
     console.log($scope);
@@ -39,5 +40,6 @@ angular.module('teamMotivate')
 
       console.log(updatedTask);
       tasks.put(updatedTask, $stateParams.id1, $stateParams.id2);
+      $location.path('home');
     }
 }])
