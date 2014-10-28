@@ -1,23 +1,47 @@
+  <head>
+    <style>
+      .labels {
+        display: inline-block; 
+        width: 35%;
+      }
+      .inputs {
+        width: 55%;
+      }
+    </style>
+  </head> 
+
   <div class="page-header">
-    <form ng-submit="updateProject()">
+
+    <form ng-show="!update" ng-submit="updateProject()" style="width: 350px">
+      <h3>Update Project</h3><br>
       <div class="form-group">
-        <input type="text" placeholder="Project Name" ng-model="project.name"></input>
+        <label class="labels">Project Name: </label> 
+        <input class="inputs" type="text" placeholder="Project Name" ng-model="project.name"></input>
       </div>
 
       <div class="form-group">
-        <textarea placeholder="Project Description" ng-model="project.description"></textarea>
+        <label class="labels">Description: </label> 
+        <textarea class="inputs" placeholder="Project Description" ng-model="project.description"></textarea>
       </div>
 
-      <button type="submit">Update</button>
+      <button ng-click="toggleProject()" type="submit">Update</button>
     </form>
-    <h2>
-      {{project.name}}
-    </h2>
-    <h4>
-      Description: {{project.description}}
-      <br>Members: {{project.users}}
-    </h4>
+
+    <div ng-show="update">
+      <h1>
+        {{project.name}}
+      </h1>
+      <br>
+      <h4>
+        Description: {{project.description}}
+        <br>Members: {{users}}
+      </h4>
+      <button ng-click="toggleProject()">Update</button>
+    </div>
+
   </div>
+
+
   <div class = "row">
     <div class = "col-md-6">
       <h3>Tasks in Progress</h3>
@@ -31,35 +55,40 @@
           <br> Deadline: {{task.deadline}}
           <br> Completion: {{task.completion}}%
         </div>
-<button type="button" style="display:inline-block" class="btn btn-default btn-lg">
-  <span class="glyphicon glyphicon-remove" ng-click="deleteTask(project._id, task._id)"></span> 
-</button>
-        <div style="display:inline-block" class="pull-right" ng-click="deleteTask(project._id, task._id)">X</div>
+        <button type="button" style="display:inline-block; background-color:rgba(0,0,0,0); border-color:rgba(0,0,0,0)" class="btn btn-default btn-lg pull-right"> 
+          <span class="glyphicon glyphicon-remove" ng-click="deleteTask(project._id, task._id)"></span> 
+        </button>
       </div>
     </div>
 
     <div class = "col-md-6" >
-      <form style="width:80%;background:rgba(255,255,255,0)" class="well" ng-submit="addTask()">
-        <h3>Add Task</h3>
+      <button ng-show="add" ng-click="toggleTask()">Add Task</button>
+
+      <form ng-show="!add" style="width:80%;background:rgba(255,255,255,0)" class="well" ng-submit="addTask()">
+        <h3>Add Task</h3><br>
         <div class="form-group">
-          <input type="text" placeholder="Assignee" ng-model="assignee"></input>
+          <label class="labels">Assignee: </label>
+          <input type="text" placeholder="Assignee" ng-model="assignee" class="inputs"></input>
         </div>
 
         <div class="form-group">
-          <textarea placeholder="Task Description" ng-model="description"></textarea>
+          <label class="labels">Task Description: </label>
+          <textarea placeholder="Task Description" ng-model="description" class="inputs"></textarea>
         </div>
 
         <div class="form-group">
-          <input type="date" placeholder="Deadline" ng-model="deadline"></input>
+          <label class="labels">Deadline: </label>
+          <input type="date" placeholder="Deadline" ng-model="deadline" class="inputs"></input>
         </div>
 
         <div class="form-group">
-          <input type="text" placeholder="Expected Hours" ng-model="etc"></input>
-        </div>
+          <label class="labels">Expected Hours: </label>
+          <input type="text" placeholder="Expected Hours" ng-model="etc" class="inputs"></input>
+        </div><br>
 
-        <button type="submit">Create</button>
+        <button ng-click="toggleTask()" type="submit">Create</button>
       </form>
-    <div ng-show="message">
-      {{message}}
+      <div ng-show="message">
+        {{message}}
+      </div>
     </div>
-  </div>

@@ -23,13 +23,30 @@ angular.module('teamMotivate')
         project.tasks[i].deadline = (date.getMonth()+1) + '/' + date.getDate();
       }
       $scope.project = project;
+
+      console.log(project.users);
+
+      $scope.users = project.users[0]; 
+      for (var i =1; i< project.users.length; i++) {
+        $scope.users = $scope.users + ', ' + project.users[i];
+      }
     }
 
-
+    $scope.add = true;
+    $scope.update = true;
+    $scope.message='';
     projects.get($stateParams.id).then(
       function(result) {
         formatProject(result);
       });
+
+    $scope.toggleTask = function() {
+      $scope.add = !$scope.add;
+    }
+
+    $scope.toggleProject = function() {
+      $scope.update = !$scope.update;
+    };
 
     $scope.addTask = function() {
       // if (users.users.filter(function(v) {return v.username === $scope.assignee}).length === 0) {
@@ -37,9 +54,9 @@ angular.module('teamMotivate')
       // }
       if (!$scope.deadline) {
         $scope.message = 'Need a deadline';
+        $scope.add=false;
         return;
       }
-      $scope.message = '';
       var newTask = {
         assignee: $scope.assignee,
         description: $scope.description,
@@ -53,6 +70,8 @@ angular.module('teamMotivate')
         function(results) {
           var success = results.data.success;
           if (success) {
+            $scope.message="";
+            $scope.add=true;
             projects.get($stateParams.id).then(
               function(result) {
                 formatProject(result);
@@ -60,6 +79,7 @@ angular.module('teamMotivate')
           }
           else {
             $scope.message = results.data.message;
+            $scope.add=false;
           }
         });
 
