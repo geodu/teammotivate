@@ -7,7 +7,6 @@ var router = express.Router();
 var Project = require('../models/project').Project;
 var User = require('../models/user').User;
 var utils = require('../utils');
-var ObjectId = require('mongoose').Types.ObjectId;
 
 // Returns all the projects accessible to a user.
 router.get('/', utils.loggedIn, function(request, response) {

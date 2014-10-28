@@ -10,7 +10,7 @@ var Tasks = require('../models/task').Task;
 var Users = require('../models/user').User;
 var utils = require('../utils');
 
-// Returns all the tasks for a project.
+// Returns all the tasks assigned to a user for a project.
 router.get('/:id/tasks', utils.loggedIn, function(request, response) {
 	Projects.findOne({ _id: request.params.id }).populate('tasks').exec(function(projErr, project) {
 		utils.handleError(projErr);
@@ -21,7 +21,9 @@ router.get('/:id/tasks', utils.loggedIn, function(request, response) {
 			});
 		}
 		else {
-			response.json({success: true, tasks: project.tasks});
+			response.json({success: true, tasks: project.tasks.filter(function(v) {
+				return v.assignee === request.user.username;
+			})});
 		}
 	});
 });
