@@ -12,9 +12,8 @@ angular.module('teamMotivate')
 	'$http',
 	'$scope',
   '$location',
-	'users',
-	'session',
-	function($http, $scope, $location, users, session) {
+	'users'
+	function($http, $scope, $location, users) {
 		$scope.addUser = function() {
 			if ($scope.name === '') { return; }
 			console.log($scope);

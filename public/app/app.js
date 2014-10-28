@@ -1,8 +1,7 @@
-angular.module('teamMotivate', ['ui.router'], function($httpProvider) {
+angular.module('teamMotivate', ['ui.router', 'ngCookies'], function($httpProvider) {
   // Use x-www-form-urlencoded Content-Type
   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
   $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-
 
   /**
    * Converts an object to x-www-form-urlencoded serialization.
@@ -46,9 +45,16 @@ angular.module('teamMotivate', ['ui.router'], function($httpProvider) {
 .config(['$urlRouterProvider', function($urlRouterProvider) {
   $urlRouterProvider.otherwise('login');
 }])
-.factory('session', function() {
-  return {};
-})
+.factory('session', ['$cookieStore', function($cookieStore) {
+  return {
+    name: function() {
+      return $cookieStore.get('username');
+    },
+    setName: function(username) {
+      $cookieStore.put('username', username);
+    }
+  };
+}])
 .factory('users', ['$http', function($http) {
 
   var o = {

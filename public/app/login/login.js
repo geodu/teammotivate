@@ -25,7 +25,7 @@ angular.module('teamMotivate')
 			$http.post('/sessions', userFields).success(function(response) {
 			  	console.log(response);
 			  	if (response.success === true) {
-			  		session.name = userFields.username;
+			  		session.setName(userFields.username);
 			  		$location.path('home');
 			  	}
 			  });

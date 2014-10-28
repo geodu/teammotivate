@@ -21,7 +21,7 @@ angular.module('teamMotivate')
 	function($scope, projects, session, tasks) {
   	console.log(projects);
   	console.log(session);
-  	$scope.user = session.name;
+  	$scope.user = session.name();
   	$scope.projects = projects.projects;
     $scope.tasks = {};
     for (var i = 0; i < $scope.projects.length; i++) {
@@ -47,7 +47,7 @@ angular.module('teamMotivate')
     }
 
     $scope.isLoggedIn = function() {
-      return session.name !== undefined;
+      return session.name() !== undefined;
     }
 
 }])

@@ -28,7 +28,7 @@ angular.module('teamMotivate')
       if ($scope.name === '') { return; }
       var newProject = {
         name: $scope.name,
-        leader: session.name,
+        leader: session.name(),
         description: $scope.description,
         users: $scope.selectedUsers
       }
