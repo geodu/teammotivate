@@ -11,10 +11,11 @@ angular.module('teamMotivate')
 .controller('ProjectsCtrl', [
   '$scope',
   '$stateParams',
+  '$location',
   'users',
   'projects',
   'tasks',
-  function($scope, $stateParams, users, projects, tasks) {
+  function($scope, $stateParams, $location, users, projects, tasks) {
     projects.get($stateParams.id).then(
       function(result) {
         var project = result.data.project;
@@ -60,4 +61,8 @@ angular.module('teamMotivate')
       $scope.projName = '';
       $scope.projDescription = '';
     };
+
+    $scope.deleteTask = function(projID, taskID) {
+      tasks.delete(projID, taskID)
+    }
 }])

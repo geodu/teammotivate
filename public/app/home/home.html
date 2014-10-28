@@ -12,16 +12,16 @@
 	    {{project.name}}
 	  </div>
 	  Leader: {{project.leader}}
-	  <div class="progress" style="width:60%">
+	  <div ng-show="tasks" class="progress" style="width:60%">
 		  <div class="progress-bar" role="progressbar" aria-valuenow="{{project.completion}}" aria-valuemin="0" aria-valuemax="100"
 		  style="width:{{project.completion}}%">
 		    {{project.completion}}%
 		  </div>
 		</div>
-	  <div ng-show="tasks[project._id]">
+	  <div ng-show="tasks[project._id].length">
 	  	Your Tasks:
 	  </div>
-	  <div ng-show="!tasks[project._id]">
+	  <div ng-show="!tasks[project._id].length">
 	  	<br> You have no tasks for this project.
 	  </div>
 	  <div style="width:80%" class="well" ng-repeat="task in tasks[project._id]">

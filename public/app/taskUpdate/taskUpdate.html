@@ -1,29 +1,46 @@
+  <head>
+    <style>
+      .labels {
+        display: inline-block; 
+        width: 200px;
+      }
+      .inputs {
+        width: 300px;
+      }
+    </style>
+  </head> 
+
   <div class="page-header">
     <h3>
-      {{task.assignee}}
+      Update task
     </h3>
   </div>
 
   <form ng-submit="updateTask()">
     <div class="form-group">
-      <input type="text" placeholder="Assignee" ng-model="task.assignee"></input>
+      <label class="labels">Assignee: </label>
+      <input type="text" placeholder="Assignee" ng-model="task.assignee" class="inputs"></input> 
     </div>
 
     <div class="form-group">
-      <textarea placeholder="Task Description" ng-model="task.description"></textarea>
+      <label class="labels">Task Description: </label>
+      <textarea placeholder="Task Description" ng-model="task.description" class="inputs"></textarea>
     </div>
 
     <div class="form-group">
-      <input type="date" placeholder="Deadline" ng-model="task.deadline"></input>
+      <label class="labels">Deadline: </label>
+      <input type="date" placeholder="Deadline" ng-model="task.deadline" class="inputs"></input>
     </div>
 
     <div class="form-group">
-      <input type="text" placeholder="Completion" ng-model="task.completion"></input>
+      <label class="labels">Completion</label>
+      <input type="text" placeholder="Completion" ng-model="task.completion" class="inputs"></input>
     </div>
 
     <div class="form-group">
-      <input type="text" placeholder="Expected Hours" ng-model="task.etc"></input>
+      <label class="labels">Expected Hours: </label>
+      <input type="text" placeholder="Expected Hours" ng-model="task.etc" class="inputs"></input>
     </div>
-
+    <br>
     <button type="submit">Update</button>
   </form>

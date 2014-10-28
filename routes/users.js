@@ -24,6 +24,9 @@ router.post('/', function(request, response) {
     else if (doc) {
       response.json({success: false, message: 'User already exists'});
     }
+    else if (!request.body.username) {
+      response.json({success: false, message: 'Need to specify user'});
+    }
     else if (!request.body.password || request.body.password.length < 8) {
       response.json({
         success: false,
