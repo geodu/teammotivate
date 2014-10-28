@@ -8,7 +8,7 @@ var projectSchema = new mongoose.Schema({
   leader: String,
   name: String,
   description: String,
-  tasks: [String],
+  tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }],
   users: [String]
 });
 

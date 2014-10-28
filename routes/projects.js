@@ -7,26 +7,15 @@ var router = express.Router();
 var Project = require('../models/project').Project;
 var User = require('../models/user').User;
 var utils = require('../utils');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 // Returns all the projects accessible to a user.
 router.get('/', utils.loggedIn, function(request, response) {
 	var username = request.user.username;
-	var userProjects = [];
-	User.findOne({username: username}, function(err, docs) {
+	User.findOne({username: username}).populate('projects').exec(function(err, docs) {
 		utils.handleError(err);
 		var projects = docs.projects;
-		if (projects.length === 0) {
-			response.json({success: true, projects: userProjects});
-		}
-		else {
-			Project.find({_id: {$in: projects}}, function(err, proj) {
-				utils.handleError(err);
-				for (var i = 0; i< proj.length; i++ ) {
-					userProjects.push(proj[i]);
-				}
-				response.json({success: true, projects: userProjects});
-			});
-		}
+		response.json({success: true, projects: projects});
 	});
 });
 
@@ -63,16 +52,16 @@ router.post('/', utils.loggedIn, function(request, response) {
 // Returns the project specified by an id.
 router.get('/:id', utils.loggedIn, function(request, response) {
   var id = request.params.id;
-  Project.findOne({_id: id}, function(err, docs) {
+  Project.findOne({_id: id}).populate('tasks').exec(function(err, doc) {
 		utils.handleError(err);
-		if (!docs) {
+		if (!doc) {
 			response.json({success: false, message: 'No project found'});
 		}
-		else if (docs.users.indexOf(request.user.username) === -1) {
+		else if (doc.users.indexOf(request.user.username) === -1) {
 			response.json({success: false, message: 'Not a member of the project'});
 		}
 		else {
-			response.json({success: true, project: docs});
+			response.json({success: true, project: doc});
 		}
   });
 });
