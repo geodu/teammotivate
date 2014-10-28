@@ -24,12 +24,14 @@ angular.module('teamMotivate')
   	$scope.user = session.name;
   	$scope.projects = projects.projects;
     $scope.tasks = {};
-    for (project in $scope.projects) {
-      $scope.tasks[project._id] = tasks.get(project._id);
+    for (var i = 0; i < $scope.projects.length; i++) {
+      $scope.tasks.projID = tasks.get($scope.projects[i]._id);
+      console.log($scope.projects[i]);
     }
 
 
     $scope.isLoggedIn = function() {
       return session.name !== undefined;
     }
+
 }])
