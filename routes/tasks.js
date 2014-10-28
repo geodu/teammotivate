@@ -53,7 +53,7 @@ router.post('/:id/tasks', utils.loggedIn, function(request, response) {
 		 			{ $push: {tasks: newTask._id}}, function(err) {
 		 			utils.handleError(err);
 			 		response.json({success: true});
-		 		});	
+				});
 			});
 		}
 		else {

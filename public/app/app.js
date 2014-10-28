@@ -54,7 +54,7 @@ angular.module('teamMotivate', ['ui.router'], function($httpProvider) {
   var o = {
     users: []
   };
-  
+
   o.get = function() {
   	console.log('in user get');
     return $http.get('/users').success(function(data) {
@@ -77,7 +77,7 @@ angular.module('teamMotivate', ['ui.router'], function($httpProvider) {
   var o = {
     projects: []
   };
-  
+
   o.getAll = function() {
     return $http.get('/projects').success(function(data) {
   		console.log('in project get');
@@ -88,8 +88,7 @@ angular.module('teamMotivate', ['ui.router'], function($httpProvider) {
 
   o.get = function(id) {
     return $http.get('/projects/'+id).success(function(data) {
-      angular.copy(data.project, o.project);
-      console.log(o.project);
+      console.log(data);
     })
   }
 

@@ -32,13 +32,14 @@ angular.module('teamMotivate')
           function(result) {
             var tasklist = result.data.tasks;
             console.log(i);
-            console.log(tasklist);
             $scope.tasks[$scope.projects[i]._id] = tasklist;
             for (var j = 0; j < result.data.tasks.length; j++) {
+              var date = new Date(tasklist[j].deadline);
+              tasklist[j].deadline = date.getMonth() + '/' + date.getDay();
               numerator += tasklist[j].completion * tasklist[j].etc;
               denominator += tasklist[j].etc;
               if (denominator !== 0) {
-                $scope.projects[i].completion = numerator / denominator;
+                $scope.projects[i].completion = (numerator / denominator).toFixed(2);
               }
             }
           });
