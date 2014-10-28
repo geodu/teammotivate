@@ -146,6 +146,12 @@ angular.module('teamMotivate', ['ui.router'], function($httpProvider) {
     })
   }
 
+  o.delete = function(projID, taskID) {
+    return $http.delete('/projects/'+projID+'/tasks/'+taskID).success(function(data) {
+      console.log(data);
+    })
+  }
+
   return o;
 }])
 .directive('editInPlace', function () {
