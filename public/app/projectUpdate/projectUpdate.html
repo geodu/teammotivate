@@ -2,6 +2,9 @@
     <h3>
       {{project.name}}
     </h3>
+    <h4>
+      Description: {{project.description}}
+    </h4>
   </div>
 
   <div ng-repeat="task in project.tasks">
@@ -19,7 +22,7 @@
     </div>
 
     <div class="form-group">
-      <input type="text" placeholder="Deadline" ng-model="deadline"></input>
+      <input type="date" placeholder="Deadline" ng-model="deadline"></input>
     </div>
 
     <div class="form-group">

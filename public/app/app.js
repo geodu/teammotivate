@@ -99,11 +99,17 @@ angular.module('teamMotivate', ['ui.router'], function($httpProvider) {
     tasks: []
   };
 
-  o.get = function(projID) {
-    return $http.get('/projects/'+projID+'/tasks/').success(function(data) {
+  o.getTasks = function(projID) {
+    return $http.get('/projects/' + projID + '/tasks/').success(function(data) {
       console.log('in task get');
       angular.copy(data.tasks, o.tasks);
       console.log(o.tasks);
+    });
+  }
+
+  o.addTask = function(projID, taskData) {
+    return $http.post('/projects/' + projID + '/tasks', taskData).success(function(data) {
+      console.log(data);
     });
   }
   return o;

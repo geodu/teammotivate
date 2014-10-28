@@ -25,9 +25,10 @@ angular.module('teamMotivate')
   	$scope.projects = projects.projects;
     $scope.tasks = {};
     for (var i = 0; i < $scope.projects.length; i++) {
-      $scope.tasks.projID = tasks.get($scope.projects[i]._id);
-      console.log($scope.projects[i]);
+      tasks.getTasks($scope.projects[i]._id);
+      $scope.tasks[$scope.projects[i]._id] = tasks.tasks;
     }
+    console.log($scope.tasks);
 
 
     $scope.isLoggedIn = function() {
