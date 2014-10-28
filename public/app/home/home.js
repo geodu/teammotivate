@@ -25,9 +25,15 @@ angular.module('teamMotivate')
   	$scope.projects = projects.projects;
     $scope.tasks = {};
     for (var i = 0; i < $scope.projects.length; i++) {
-      tasks.getTasks($scope.projects[i]._id);
-      $scope.tasks[$scope.projects[i]._id] = tasks.tasks;
-      console.log(tasks.tasks);
+      (function(i) {
+        tasks.getTasks($scope.projects[i]._id).then(
+          function(result) {
+            console.log(i);
+            console.log(result.data.tasks);
+            $scope.tasks[$scope.projects[i]._id] = result.data.tasks;
+            console.log($scope.tasks);
+          });
+      })(i);
     }
     console.log($scope.tasks);
 

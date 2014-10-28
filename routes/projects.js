@@ -22,13 +22,15 @@ router.get('/', utils.loggedIn, function(request, response) {
 router.post('/', utils.loggedIn, function(request, response) {
 	var data = request.body;
 	var user = request.user.username;
-	if (data.users) {
-		data.users.push(user);
-	}
-	else {
+
+	if (!data.users) {
 		response.json({success: false, message: 'Need to specify users'});
 		return;
 	}
+	if (data.users.indexOf(user) === -1) {
+		data.users.push(user);
+	}
+
 	var proj = new Project({
 		name: data.name,
 	  leader: user,
