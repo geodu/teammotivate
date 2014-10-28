@@ -4,26 +4,32 @@
   </div>
 
   <h2>Your Projects</h2>
-	<div ng-repeat="project in projects">
-	  <a ng-show="user === project.leader" href="#/projects/{{project._id}}">
+	<div style="width:80%;background:rgba(255,255,255,0)" class="well" ng-repeat="project in projects">
+	  <a ng-show="user === project.leader" href="#/projects/{{project._id}}"><h3>
 	    {{project.name}}
-	  </a>
-	  <span ng-show="user !== project.leader">
+	  </h3></a>
+	  <div ng-show="user !== project.leader">
 	    {{project.name}}
-	  </span>
-	  - Leader: {{project.leader}}
-	  <span ng-show="tasks[project._id]">
-	  	<br> Your Tasks:
-	  </span>
-	  <span ng-show="!tasks[project._id]">
+	  </div>
+	  Leader: {{project.leader}}
+	  <div class="progress" style="width:60%">
+		  <div class="progress-bar" role="progressbar" aria-valuenow="{{project.completion}}" aria-valuemin="0" aria-valuemax="100"
+		  style="width:{{project.completion}}%">
+		    {{project.completion}}%
+		  </div>
+		</div>
+	  <div ng-show="tasks[project._id]">
+	  	Your Tasks:
+	  </div>
+	  <div ng-show="!tasks[project._id]">
 	  	<br> You have no tasks for this project.
-	  </span>
-	  <div ng-repeat="task in tasks[project._id]">	
+	  </div>
+	  <div style="width:80%" class="well" ng-repeat="task in tasks[project._id]">
 	  	<a href="#/projects/{{project._id}}/tasks/{{task._id}}">
-			    {{task.description}}
+			{{task.description}}
 		  </a>
-			    <br> Estimated Time to Completion: {{task.etc}}
-			    <br> Deadline: {{task.deadline}}
-			    <br> Completion: {{task.completion}}%
+	    <br> Estimated Time to Completion: {{task.etc}}
+	    <br> Deadline: {{task.deadline}}
+	    <br> Completion: {{task.completion}}%
 	  </div>
 	</div>
