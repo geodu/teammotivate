@@ -13,8 +13,6 @@ angular.module('teamMotivate')
   '$stateParams',
   'projects',
   function($scope, $stateParams, projects) {
-    console.log(projects);
-    console.log($stateParams);
     $scope.post = projects.projects[$stateParams.id];
     console.log(projects.projects);
     console.log($scope);
