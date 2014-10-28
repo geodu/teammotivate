@@ -79,16 +79,17 @@ router.post('/:id', utils.loggedIn, function(request, response) {
 	var leader = request.body.leader;
 	var name = request.body.name;
 	var users = request.body.users;
-	if (users) {
-		users.push(username);
-	}
-	else {
+
+	if (!users) {
 		response.json({success: false, message: 'Need to specify users'});
 		return;
-	}
+	}	
 	if (!leader) {
 		response.json({success: false, message: 'Need to specify leader'});
 		return;
+	}
+	if (users.indexOf(username) === -1) {
+		users.push(username);
 	}
 	Project.findOneAndUpdate({_id: id, leader: username}, {$set: {
 			name: name,

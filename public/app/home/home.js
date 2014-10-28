@@ -26,16 +26,24 @@ angular.module('teamMotivate')
     $scope.tasks = {};
     for (var i = 0; i < $scope.projects.length; i++) {
       (function(i) {
+        var numerator = 0.0;
+        var denominator = 0.0;
         tasks.getTasks($scope.projects[i]._id).then(
           function(result) {
+            var tasklist = result.data.tasks;
             console.log(i);
-            console.log(result.data.tasks);
-            $scope.tasks[$scope.projects[i]._id] = result.data.tasks;
-            console.log($scope.tasks);
+            console.log(tasklist);
+            $scope.tasks[$scope.projects[i]._id] = tasklist;
+            for (var j = 0; j < result.data.tasks.length; j++) {
+              numerator += tasklist[j].completion * tasklist[j].etc;
+              denominator += tasklist[j].etc;
+              if (denominator !== 0) {
+                $scope.projects[i].completion = numerator / denominator;
+              }
+            }
           });
       })(i);
     }
-    console.log($scope.tasks);
 
     $scope.isLoggedIn = function() {
       return session.name !== undefined;
