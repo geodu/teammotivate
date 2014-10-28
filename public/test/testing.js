@@ -4,6 +4,7 @@
 
 (function() {
   var connectionString = 'http://teammotivate-dug.rhcloud.com/';
+  // var connectionString = 'http://localhost:8080/';
 
   asyncTest('creating the same user again', function() {
     $.ajax({
@@ -89,7 +90,7 @@
       success : function(data) {
         console.log(data);
         ok(data.success);
-        deepEqual(data.projects[0].name, 'bake');
+        equal(data.projects.filter(function(v) {return v.name === 'bake'}).length, 1);
         start();
       },
       failure : function(err) {
@@ -106,7 +107,7 @@
       success : function(data) {
         console.log(data);
         ok(data.success);
-        deepEqual(data.project.name, 'bake');
+        equal(data.project.name, 'bake');
         start();
       },
       failure : function(err) {
@@ -139,7 +140,7 @@
       type: 'POST', 
       url: connectionString + 'projects/' + projectID + '/tasks',
       dataType: 'json', 
-      data: { assignee: 'testuser', description: 'todo', completion: 0, deadline: 'October 13, 2014 11:13:00' },
+      data: { assignee: 'testuser', description: 'todo', etc: 5, deadline: 'October 13, 2014 11:13:00' },
       success : function(data) {
         console.log(data);
         ok(data.success); 
@@ -159,7 +160,7 @@
       success : function(data) {
         console.log(data);
         ok(data.success);
-        deepEqual(data.tasks[0].description, 'todo');
+        equal(data.tasks[0].description, 'todo');
         taskID = data.tasks[0]._id;
         start();
       },
@@ -177,7 +178,7 @@
       success : function(data) {
         console.log(data);
         ok(data.success);
-        deepEqual(data.task.description, 'todo');
+        equal(data.task.description, 'todo');
         start();
       },
       failure : function(err) {
@@ -191,7 +192,7 @@
       type: 'PUT', 
       url: connectionString + 'projects/' + projectID + '/tasks/' + taskID,
       dataType: 'json',
-      data: { assignee: 'testuser', description: 'todo', completion: 2, deadline: 'October 16, 2014 11:13:00' },
+      data: { assignee: 'testuser', description: 'todo', completion: 2, etc: 5, deadline: 'October 16, 2014 11:13:00' },
       success : function(data) {
         console.log(data);
         ok(data.success);
