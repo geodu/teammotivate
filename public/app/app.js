@@ -96,8 +96,8 @@ angular.module('teamMotivate', ['ui.router'], function($httpProvider) {
 }])
 .factory('tasks', ['$http', function($http) {
   var o = {
-    tasks: [];
-  }
+    tasks: []
+  };
 
   o.get = function(projID) {
     return $http.get('/projects/'+projID+'tasks/').success(function(data) {
@@ -105,5 +105,5 @@ angular.module('teamMotivate', ['ui.router'], function($httpProvider) {
       angular.copy(data.tasks, o.tasks);
       console.log(o.tasks);
     });
-  };  
+  }
 }])
