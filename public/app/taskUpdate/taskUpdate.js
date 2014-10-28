@@ -2,9 +2,9 @@ angular.module('teamMotivate')
 
 .config(['$stateProvider', function($stateProvider) {
 	$stateProvider.state('taskUpdate', {
-      url: '/{id1}/tasks/{id2}',
+      url: '/projects/{id1}/tasks/{id2}',
       templateUrl: '/app/taskUpdate/taskUpdate.html',
-      controller: 'TasksCtrl'
+      controller: 'TasksCtrl',
     });
 }])
 
@@ -17,6 +17,15 @@ angular.module('teamMotivate')
     console.log($stateParams);
     console.log($scope);
 
+    $scope.tasks = {};
+    tasks.get($stateParams.id1, $stateParams.id2).then(
+      function(result) {
+        console.log(result);
+        console.log(result.data.task);
+        $scope.task = result.data.task;
+        console.log($scope.task);
+      });
+
     $scope.updateTask = function() {
       if ($scope.body === '') { return; }
       var updatedTask = {
@@ -28,7 +37,6 @@ angular.module('teamMotivate')
       }
 
       console.log(updatedTask);
-      tasks.post(updatedTask, stateParams.id1, stateParams.id2);
+      tasks.put(updatedTask, $stateParams.id1, $stateParams.id2);
     }
 }])
-

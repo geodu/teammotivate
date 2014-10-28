@@ -1,6 +1,8 @@
 angular.module('teamMotivate', ['ui.router'], function($httpProvider) {
   // Use x-www-form-urlencoded Content-Type
   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+  $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+
 
   /**
    * Converts an object to x-www-form-urlencoded serialization.
@@ -122,10 +124,18 @@ angular.module('teamMotivate', ['ui.router'], function($httpProvider) {
   o.put = function(taskData, projID, taskID) {
     console.log('in task post');
     console.log(taskData);
-    return $http.put('/projects/'+projID+'tasks/'+taskID, taskData).success(function(data) {
+    return $http.put('/projects/'+projID+'/tasks/'+taskID, taskData).success(function(data) {
       console.log(data);
       angular.copy(data.success, o.success);
     });
+  }
+
+  o.get = function(projID, taskID) {
+    return $http.get('/projects/'+projID + '/tasks/'+taskID).success(function(data) {
+      console.log(data.task);
+      //TODO check if o.success is true?
+      angular.copy(data.task, o.task);
+    })
   }
 
   return o;
