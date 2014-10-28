@@ -30,6 +30,11 @@ router.get('/:id/tasks', utils.loggedIn, function(request, response) {
 
 // Create a new task.
 router.post('/:id/tasks', utils.loggedIn, function(request, response) {
+	if (!request.body.assignee || !request.body.description ||
+		!request.body.etc || !request.body.deadline) {
+		response.json({success: false, message: 'Need to specify all fields'});
+		return;
+	}
 	Projects.findOne( {_id: request.params.id}, function(projErr, project) {
 		utils.handleError(projErr);
 		if (!project) {
@@ -91,6 +96,11 @@ router.get('/:id1/tasks/:id2', utils.loggedIn, function(request, response) {
 
 // Edit a task by overwriting the task associated with an id.
 router.put('/:id1/tasks/:id2', utils.loggedIn, function(request, response) {
+	if (!request.body.assignee || !request.body.description ||
+		!request.body.etc || !request.body.deadline || !request.body.completion) {
+		response.json({success: false, message: 'Need to specify all fields'});
+		return;
+	}
 	var editTask = function() {
 		var newDeadline = new Date(request.body.deadline);
 		Tasks.update({ _id: request.params.id2 }, {

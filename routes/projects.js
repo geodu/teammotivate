@@ -23,8 +23,8 @@ router.post('/', utils.loggedIn, function(request, response) {
 	var data = request.body;
 	var user = request.user.username;
 
-	if (!data.users) {
-		response.json({success: false, message: 'Need to specify users'});
+	if (!data.description || !data.users || !data.name) {
+		response.json({success: false, message: 'Need to specify all fields'});
 		return;
 	}
 	if (data.users.indexOf(user) === -1) {
@@ -80,14 +80,10 @@ router.post('/:id', utils.loggedIn, function(request, response) {
 	var name = request.body.name;
 	var users = request.body.users;
 
-	if (!users) {
-		response.json({success: false, message: 'Need to specify users'});
+	if (!description || !leader || !users || !name) {
+		response.json({success: false, message: 'Need to specify all fields'});
 		return;
 	}	
-	if (!leader) {
-		response.json({success: false, message: 'Need to specify leader'});
-		return;
-	}
 	if (users.indexOf(username) === -1) {
 		users.push(username);
 	}
