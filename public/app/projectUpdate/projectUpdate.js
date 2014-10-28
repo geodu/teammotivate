@@ -16,14 +16,19 @@ angular.module('teamMotivate')
   'projects',
   'tasks',
   function($scope, $stateParams, $location, users, projects, tasks) {
+    var formatProject = function(result) {
+      var project = result.data.project;
+      for (var i = 0; i < project.tasks.length; i++) {
+        var date = new Date(project.tasks[i].deadline);
+        project.tasks[i].deadline = (date.getMonth()+1) + '/' + date.getDate();
+      }
+      $scope.project = project;
+    }
+
+
     projects.get($stateParams.id).then(
       function(result) {
-        var project = result.data.project;
-        for (var i = 0; i < project.tasks.length; i++) {
-          var date = new Date(project.tasks[i].deadline);
-          project.tasks[i].deadline = date.getMonth() + '/' + date.getDay();
-        }
-        $scope.project = project;
+        formatProject(result);
       });
 
     $scope.addTask = function() {
@@ -38,13 +43,16 @@ angular.module('teamMotivate')
       }
 
       console.log(newTask);
-      tasks.addTask($stateParams.id, newTask);
 
+      tasks.addTask($stateParams.id, newTask).then(
+        function() {
+          projects.get($stateParams.id).then(
+            function(result) {
+              formatProject(result);
+            });
+        });
 
-      newTask.deadline = $scope.deadline.getMonth() + '/' + $scope.deadline.getDay();
-      newTask.completion = 0;
-
-      $scope.project.tasks.push(newTask);
+      //$scope.project.tasks.push(newTask);
       $scope.assignee = '';
       $scope.description = '';
       $scope.etc = '';
@@ -69,6 +77,10 @@ angular.module('teamMotivate')
 
     $scope.deleteTask = function(projID, taskID) {
       tasks.delete(projID, taskID);
+      projects.get($stateParams.id).then(
+        function(result) {
+          formatProject(result);
+        });
       //$scope.project.tasks.remove(newTask);
     }
 }])
