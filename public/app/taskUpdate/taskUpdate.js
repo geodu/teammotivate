@@ -23,6 +23,7 @@ angular.module('teamMotivate')
         console.log(result);
         console.log(result.data.task);
         $scope.task = result.data.task;
+        $scope.task.deadline = new Date($scope.task.deadline);
         console.log($scope.task);
       });
 
@@ -32,7 +33,7 @@ angular.module('teamMotivate')
         assignee: $scope.task.assignee,
         description: $scope.task.description,
         deadline: $scope.task.deadline,
-        completion: $scope.task.completion, 
+        completion: $scope.task.completion,
         etc: $scope.task.etc
       }
 

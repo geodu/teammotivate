@@ -17,8 +17,12 @@ angular.module('teamMotivate')
   function($scope, $stateParams, users, projects, tasks) {
     projects.get($stateParams.id).then(
       function(result) {
-        console.log(result.data);
-        $scope.project = result.data.project;
+        var project = result.data.project;
+        for (var i = 0; i < project.tasks.length; i++) {
+          var date = new Date(project.tasks[i].deadline);
+          project.tasks[i].deadline = date.getMonth() + '/' + date.getDay();
+        }
+        $scope.project = project;
       });
 
     $scope.addTask = function() {
@@ -28,17 +32,17 @@ angular.module('teamMotivate')
       var newTask = {
         assignee: $scope.assignee,
         description: $scope.description,
-        deadline: $scope.deadline,
+        deadline: $scope.deadline.toString(),
         etc: $scope.etc
       }
 
       console.log(newTask);
-      tasks.addTask($stateParams.id, newTask); 
-      $scope.project.tasks.push(newTask); 
+      tasks.addTask($stateParams.id, newTask);
+      $scope.project.tasks.push(newTask);
       $scope.assignee = '';
       $scope.description = '';
       $scope.etc = '';
-      $scope.date = ''; 
+      $scope.date = '';
     };
 
     $scope.updateProject = function() {
@@ -52,8 +56,8 @@ angular.module('teamMotivate')
         users: $scope.project.users
       }
 
-      projects.update($stateParams.id, updatedProj); 
-      $scope.projName = ''; 
+      projects.update($stateParams.id, updatedProj);
+      $scope.projName = '';
       $scope.projDescription = '';
     };
 }])
