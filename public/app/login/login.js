@@ -26,12 +26,11 @@ angular.module('teamMotivate')
 			  	console.log(response);
 			  	if (response.success === true) {
 			  		session.name = userFields.username;
-			  		console.log(session);
+			  		$location.path('home');
 			  	}
 			  });
 			$scope.name = '';
 			$scope.password = '';
-			$location.path('home');
 		}
 	}
 ])

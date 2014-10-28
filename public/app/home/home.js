@@ -29,7 +29,6 @@ angular.module('teamMotivate')
       console.log($scope.projects[i]);
     }
 
-
     $scope.isLoggedIn = function() {
       return session.name !== undefined;
     }
