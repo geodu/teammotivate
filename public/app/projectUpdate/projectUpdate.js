@@ -15,8 +15,13 @@ angular.module('teamMotivate')
   'projects',
   'tasks',
   function($scope, $stateParams, users, projects, tasks) {
-    $scope.project = projects.projects.filter(function(v) {return v._id === $stateParams.id})[0]
+    //$scope.project = projects.projects.filter(function(v) {return v._id === $stateParams.id})[0]
     console.log($scope.project);
+    projects.get($stateParams.id).then(
+      function(result) {
+        console.log(result.data);
+        $scope.project = result.data.project;
+      });
 
     $scope.addTask = function() {
       // if (users.users.filter(function(v) {return v.username === $scope.assignee}).length === 0) {
@@ -30,10 +35,27 @@ angular.module('teamMotivate')
       }
 
       console.log(newTask);
-      tasks.addTask($stateParams.id, newTask);
+      tasks.addTask($stateParams.id, newTask); 
+      $scope.project.tasks.push(newTask); 
       $scope.assignee = '';
       $scope.description = '';
       $scope.etc = '';
-      $scope.date = '';  
+      $scope.date = ''; 
+    };
+
+    $scope.updateProject = function() {
+      // if (users.users.filter(function(v) {return v.username === $scope.assignee}).length === 0) {
+      //   return;
+      // }
+      var updatedProj = {
+        name: $scope.projName,
+        description: $scope.projDescription,
+        leader: $scope.project.leader,
+        users: $scope.project.users
+      }
+
+      projects.update($stateParams.id, updatedProj); 
+      $scope.projName = ''; 
+      $scope.projDescription = '';
     };
 }])

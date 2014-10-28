@@ -1,33 +1,56 @@
   <div class="page-header">
-    <h3>
+    <form ng-submit="updateProject()">
+      <div class="form-group">
+        <input type="text" placeholder="Project Name" ng-model="projName" value="{{project.name}}"></input>
+      </div>
+
+      <div class="form-group">
+        <textarea placeholder="Project Description" ng-model="projDescription" value="{{project.description}}"></textarea>
+      </div>
+
+      <button type="submit">Update</button>
+    </form>
+    <h2>
       {{project.name}}
-    </h3>
+    </h2>
     <h4>
       Description: {{project.description}}
+      <br>Members: {{project.users}}
     </h4>
   </div>
+  <div class = "row">
+    <div class = "col-md-4">
+      <h3>Tasks in Progress</h3>
+      <div ng-repeat="task in project.tasks">
+        <a href="#/projects/{{project._id}}/tasks/{{task._id}}">
+            <br>{{task.description}}
+        </a> 
+            Assigned to {{task.assignee}}
+            <br> Estimated Time to Completion: {{task.etc}}
+            <br> Deadline: {{task.deadline}}
+            <br> Completion: {{task.completion}}% 
+      </div>
+    </div>
+    <div class = "col-md-6">
+      <form ng-submit="addTask()">
+        <h3>Add Task</h3>
+        <div class="form-group">
+          <input type="text" placeholder="Assignee" ng-model="assignee"></input>
+        </div>
 
-  <div ng-repeat="task in project.tasks">
-    {{task}}
+        <div class="form-group">
+          <textarea placeholder="Task Description" ng-model="description"></textarea>
+        </div>
+
+        <div class="form-group">
+          <input type="date" placeholder="Deadline" ng-model="deadline"></input>
+        </div>
+
+        <div class="form-group">
+          <input type="text" placeholder="Expected Hours" ng-model="etc"></input>
+        </div>
+
+        <button type="submit">Create</button>
+      </form>
+    </div>
   </div>
-
-  <form ng-submit="addTask()">
-    <h3>Add Task</h3>
-    <div class="form-group">
-      <input type="text" placeholder="Assignee" ng-model="assignee"></input>
-    </div>
-
-    <div class="form-group">
-      <textarea placeholder="Task Description" ng-model="description"></textarea>
-    </div>
-
-    <div class="form-group">
-      <input type="date" placeholder="Deadline" ng-model="deadline"></input>
-    </div>
-
-    <div class="form-group">
-      <input type="text" placeholder="Expected Hours" ng-model="etc"></input>
-    </div>
-
-    <button type="submit">Create</button>
-  </form>
