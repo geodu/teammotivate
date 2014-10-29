@@ -47,17 +47,22 @@ angular.module('teamMotivate')
 
     $scope.deleteProject = function(projID) {
       console.log('deleting');
+      console.log($scope.projects);
       projects.delete(projID).then(
         function(results) {
           console.log(results);
           if (results.data.success) {
-            $location.path('users');
+            for (var i = 0; i < $scope.projects.length; i++){
+              if ($scope.projects[i]._id === projID) {
+                $scope.projects.splice(i, 1);
+                break;
+              }
+            }
           }
           else{
             $scope.message = results.data.message;
           }
         });
-      //$scope.project.tasks.remove(newTask);
     }
 
     $scope.isLoggedIn = function() {

@@ -14,7 +14,7 @@
 		  <div class="form-group">
 		  	<label class="newProjectLabels">Add Members: </label>
 		  	<input type="text" placeholder="Member" ng-model="nextUser" class="newProjectInputs"></input>
-		  	<button ng-click="addUser()">Add</button>
+		  	<span ng-click="addUser()" class="glyphicon glyphicon-plus hoverAdd"></span>
 		  	<br>
 		  	<div ng-repeat="user in selectedUsers" class="form-group">
 		  		<div style="margin-left:130px">{{user}}</div>

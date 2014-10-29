@@ -19,3 +19,11 @@
 .newProjectInputs {
   width: 55%;
 }
+
+.hoverAdd {
+	font-size: 120%;
+}
+.hoverAdd:hover {
+	background-color: lightgray;
+	color: white;
+}
