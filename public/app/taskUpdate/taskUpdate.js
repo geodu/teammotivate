@@ -1,3 +1,7 @@
+/**
+ * Authors: George Du, Rujia Zha
+ */
+
 angular.module('teamMotivate')
 
 .config(['$stateProvider', function($stateProvider) {
@@ -14,18 +18,11 @@ angular.module('teamMotivate')
   '$location',
   'tasks',
   function($scope, $stateParams, $location, tasks) {
-    console.log(tasks);
-    console.log($stateParams);
-    console.log($scope);
-
     $scope.tasks = {};
     tasks.get($stateParams.id1, $stateParams.id2).then(
       function(result) {
-        console.log(result);
-        console.log(result.data.task);
         $scope.task = result.data.task;
         $scope.task.deadline = new Date($scope.task.deadline);
-        console.log($scope.task);
       });
 
     $scope.updateTask = function() {
@@ -38,7 +35,6 @@ angular.module('teamMotivate')
         etc: $scope.task.etc
       }
 
-      console.log(updatedTask);
       tasks.put(updatedTask, $stateParams.id1, $stateParams.id2).then(
         function(result) {
           var success = result.data.success;

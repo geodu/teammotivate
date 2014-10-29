@@ -3,8 +3,8 @@
  */
 
 (function() {
-  // var connectionString = 'http://teammotivate-dug.rhcloud.com/';
-  var connectionString = 'http://localhost:8080/';
+  var connectionString = 'http://teammotivate-dug.rhcloud.com/';
+  // var connectionString = 'http://localhost:8080/';
 
   asyncTest('creating the same user again', function() {
     $.ajax({

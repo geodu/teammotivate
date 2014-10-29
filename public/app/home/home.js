@@ -1,3 +1,7 @@
+/**
+ * Authors: George Du, Michael Choi, Rujia Zha
+ */
+
 angular.module('teamMotivate')
 
 .config(['$stateProvider', function($stateProvider) {
@@ -20,7 +24,9 @@ angular.module('teamMotivate')
 	'session',
   'tasks',
 	function($scope, $location, projects, session, tasks) {
-  	$scope.user = session.name();
+    if (session.name()) {
+      $scope.user = session.name().username;
+    }
   	$scope.projects = projects.projects;
     $scope.tasks = {};
     for (var i = 0; i < $scope.projects.length; i++) {
@@ -30,8 +36,9 @@ angular.module('teamMotivate')
         tasks.getTasks($scope.projects[i]._id).then(
           function(result) {
             var tasklist = result.data.tasks;
-            console.log(i);
             $scope.tasks[$scope.projects[i]._id] = tasklist;
+            // Compute the overall completion of the tasks assigned to the user
+            // for the project.
             for (var j = 0; j < result.data.tasks.length; j++) {
               var date = new Date(tasklist[j].deadline);
               tasklist[j].deadline = (date.getMonth() + 1) + '/' + date.getDate();
@@ -46,11 +53,8 @@ angular.module('teamMotivate')
     }
 
     $scope.deleteProject = function(projID) {
-      console.log('deleting');
-      console.log($scope.projects);
       projects.delete(projID).then(
         function(results) {
-          console.log(results);
           if (results.data.success) {
             for (var i = 0; i < $scope.projects.length; i++){
               if ($scope.projects[i]._id === projID) {
@@ -59,7 +63,7 @@ angular.module('teamMotivate')
               }
             }
           }
-          else{
+          else {
             $scope.message = results.data.message;
           }
         });
