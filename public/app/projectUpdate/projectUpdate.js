@@ -95,8 +95,8 @@ angular.module('teamMotivate')
       //   return;
       // }
       var updatedProj = {
-        name: $scope.projName,
-        description: $scope.projDescription,
+        name: $scope.project.name,
+        description: $scope.project.description,
         leader: $scope.project.leader,
         users: $scope.project.users
       }
@@ -105,6 +105,7 @@ angular.module('teamMotivate')
         function(results) {
           var success = results.data.success;
           console.log(success);
+          console.log(results);
           if (!results.data.success) {
             console.log(results.data.message);
             $scope.message = results.data.message;
@@ -120,6 +121,5 @@ angular.module('teamMotivate')
         function(result) {
           formatProject(result);
         });
-      //$scope.project.tasks.remove(newTask);
     }
 }])
