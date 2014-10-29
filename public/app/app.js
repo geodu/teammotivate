@@ -1,4 +1,4 @@
-angular.module('teamMotivate', ['ui.router', 'ngCookies','ngTable'], function($httpProvider) {
+angular.module('teamMotivate', ['ui.router', 'ngCookies', 'ngTable'], function($httpProvider) {
   // Use x-www-form-urlencoded Content-Type
   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
   $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
@@ -52,6 +52,9 @@ angular.module('teamMotivate', ['ui.router', 'ngCookies','ngTable'], function($h
     },
     setName: function(username) {
       $cookieStore.put('username', username);
+    },
+    clear: function() {
+      $cookieStore.remove('username');
     }
   };
 }])
@@ -166,41 +169,41 @@ angular.module('teamMotivate', ['ui.router', 'ngCookies','ngTable'], function($h
   return o;
 }])
 .directive('editInPlace', function () {
-    return {
-        restrict: 'E',
-        scope: {
-            projectAttr: '='
-        },
-        template: '<span ng-click="edit()" ng-bind="projectAttr"></span><input ng-model="projectAttr"></input>',
-        link: function ($scope, element, attrs) {
-            console.log($scope);
-            // Let's get a reference to the input element, as we'll want to reference it.
-            var inputElement = angular.element(element.children()[1]);
+  return {
+    restrict: 'E',
+    scope: {
+      projectAttr: '='
+    },
+    template: '<span ng-click="edit()" ng-bind="projectAttr"></span><input ng-model="projectAttr"></input>',
+    link: function ($scope, element, attrs) {
+      console.log($scope);
+      // Let's get a reference to the input element, as we'll want to reference it.
+      var inputElement = angular.element(element.children()[1]);
 
-            // This directive should have a set class so we can style it.
-            element.addClass('edit-in-place');
+      // This directive should have a set class so we can style it.
+      element.addClass('edit-in-place');
 
-            // Initially, we're not editing.
-            $scope.editing = false;
+      // Initially, we're not editing.
+      $scope.editing = false;
 
-            // ng-click handler to activate edit-in-place
-            $scope.edit = function () {
-                $scope.editing = true;
+      // ng-click handler to activate edit-in-place
+      $scope.edit = function () {
+        $scope.editing = true;
 
-                // We control display through a class on the directive itself. See the CSS.
-                element.addClass('active');
+        // We control display through a class on the directive itself. See the CSS.
+        element.addClass('active');
 
-                // And we must focus the element. 
-                // `angular.element()` provides a chainable array, like jQuery so to access a native DOM function, 
-                // we have to reference the first element in the array.
-                inputElement[0].focus();
-            };
+        // And we must focus the element.
+        // `angular.element()` provides a chainable array, like jQuery so to access a native DOM function,
+        // we have to reference the first element in the array.
+        inputElement[0].focus();
+      };
 
-            // When we leave the input, we're done editing.
-            inputElement.prop('onblur', function () {
-                $scope.editing = false;
-                element.removeClass('active');
-            });
-        }
-    };
+      // When we leave the input, we're done editing.
+      inputElement.prop('onblur', function () {
+        $scope.editing = false;
+        element.removeClass('active');
+      });
+    }
+  };
 });
