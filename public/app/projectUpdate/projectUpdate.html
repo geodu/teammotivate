@@ -19,7 +19,6 @@
       <h1>
         {{project.name}}
       </h1>
-      <br>
       <h4>
         Description: {{project.description}}
         <br>Members: {{users}}
@@ -37,7 +36,7 @@
         <div style="display:inline-block">
           <a href="#/projects/{{project._id}}/tasks/{{task._id}}">
           {{task.description}}
-          </a>
+          </a><br><br>
               Assigned to {{task.assignee}}
           <br> Estimated Time to Completion: {{task.etc}}
           <br> Deadline: {{task.deadline}}
