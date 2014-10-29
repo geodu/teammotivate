@@ -15,12 +15,11 @@ angular.module('teamMotivate')
 
 .controller('MainCtrl', [
 	'$scope',
+  '$location',
 	'projects',
 	'session',
   'tasks',
-	function($scope, projects, session, tasks) {
-  	console.log(projects);
-  	console.log(session);
+	function($scope, $location, projects, session, tasks) {
   	$scope.user = session.name();
   	$scope.projects = projects.projects;
     $scope.tasks = {};
@@ -35,7 +34,7 @@ angular.module('teamMotivate')
             $scope.tasks[$scope.projects[i]._id] = tasklist;
             for (var j = 0; j < result.data.tasks.length; j++) {
               var date = new Date(tasklist[j].deadline);
-              tasklist[j].deadline = date.getMonth() + '/' + date.getDay();
+              tasklist[j].deadline = (date.getMonth() + 1) + '/' + date.getDate();
               numerator += tasklist[j].completion * tasklist[j].etc;
               denominator += tasklist[j].etc;
               if (denominator !== 0) {
@@ -47,10 +46,16 @@ angular.module('teamMotivate')
     }
 
     $scope.deleteProject = function(projID) {
-      projects.delete(projID);
-      projects.get($stateParams.id).then(
-        function(result) {
-          formatProject(result);
+      console.log('deleting');
+      projects.delete(projID).then(
+        function(results) {
+          console.log(results);
+          if (results.data.success) {
+            $location.path('users');
+          }
+          else{
+            $scope.message = results.data.message;
+          }
         });
       //$scope.project.tasks.remove(newTask);
     }
