@@ -1,27 +1,15 @@
-  <head>
-    <style>
-      .labels {
-        display: inline-block; 
-        width: 35%;
-      }
-      .inputs {
-        width: 55%;
-      }
-    </style>
-  </head> 
-
   <div class="page-header">
 
     <form ng-show="!update" ng-submit="updateProject()" style="width: 350px">
       <h3>Update Project</h3><br>
       <div class="form-group">
-        <label class="labels">Project Name: </label> 
-        <input class="inputs" type="text" placeholder="Project Name" ng-model="project.name"></input>
+        <label class="projectUpdateLabels">Project Name: </label> 
+        <input class="projectUpdateInputs" type="text" placeholder="Project Name" ng-model="project.name"></input>
       </div>
 
       <div class="form-group">
-        <label class="labels">Description: </label> 
-        <textarea class="inputs" placeholder="Project Description" ng-model="project.description"></textarea>
+        <label class="projectUpdateLabels">Description: </label> 
+        <textarea class="projectUpdateInputs" placeholder="Project Description" ng-model="project.description"></textarea>
       </div>
 
       <button ng-click="toggleProject()" type="submit">Update</button>
@@ -31,7 +19,6 @@
       <h1>
         {{project.name}}
       </h1>
-      <br>
       <h4>
         Description: {{project.description}}
         <br>Members: {{users}}
@@ -49,7 +36,7 @@
         <div style="display:inline-block">
           <a href="#/projects/{{project._id}}/tasks/{{task._id}}">
           {{task.description}}
-          </a>
+          </a><br><br>
               Assigned to {{task.assignee}}
           <br> Estimated Time to Completion: {{task.etc}}
           <br> Deadline: {{task.deadline}}
@@ -67,23 +54,23 @@
       <form ng-show="!add" style="width:80%;background:rgba(255,255,255,0)" class="well" ng-submit="addTask()">
         <h3>Add Task</h3><br>
         <div class="form-group">
-          <label class="labels">Assignee: </label>
-          <input type="text" placeholder="Assignee" ng-model="assignee" class="inputs"></input>
+          <label class="projectUpdateLabels">Assignee: </label>
+          <input type="text" placeholder="Assignee" ng-model="assignee" class="projectUpdateInputs"></input>
         </div>
 
         <div class="form-group">
-          <label class="labels">Task Description: </label>
-          <textarea placeholder="Task Description" ng-model="description" class="inputs"></textarea>
+          <label class="projectUpdateLabels">Task Description: </label>
+          <textarea placeholder="Task Description" ng-model="description" class="projectUpdateInputs"></textarea>
         </div>
 
         <div class="form-group">
-          <label class="labels">Deadline: </label>
-          <input type="date" placeholder="Deadline" ng-model="deadline" class="inputs"></input>
+          <label class="projectUpdateLabels">Deadline: </label>
+          <input type="date" placeholder="Deadline" ng-model="deadline" class="projectUpdateInputs"></input>
         </div>
 
         <div class="form-group">
-          <label class="labels">Expected Hours: </label>
-          <input type="text" placeholder="Expected Hours" ng-model="etc" class="inputs"></input>
+          <label class="projectUpdateLabels">Expected Hours: </label>
+          <input type="text" placeholder="Expected Hours" ng-model="etc" class="projectUpdateInputs"></input>
         </div><br>
 
         <button ng-click="toggleTask()" type="submit">Create</button>

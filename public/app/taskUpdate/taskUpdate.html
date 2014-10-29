@@ -1,15 +1,3 @@
-  <head>
-    <style>
-      .labels {
-        display: inline-block; 
-        width: 200px;
-      }
-      .inputs {
-        width: 300px;
-      }
-    </style>
-  </head> 
-
   <div class="page-header">
     <h3>
       Update task
@@ -18,28 +6,28 @@
 
   <form ng-submit="updateTask()">
     <div class="form-group">
-      <label class="labels">Assignee: </label>
-      <input type="text" placeholder="Assignee" ng-model="task.assignee" class="inputs"></input> 
+      <label class="taskUpdateLabels">Assignee: </label>
+      <input type="text" placeholder="Assignee" ng-model="task.assignee" class="taskUpdateInputs"></input> 
     </div>
 
     <div class="form-group">
-      <label class="labels">Task Description: </label>
-      <textarea placeholder="Task Description" ng-model="task.description" class="inputs"></textarea>
+      <label class="taskUpdateLabels">Task Description: </label>
+      <textarea placeholder="Task Description" ng-model="task.description" class="taskUpdateInputs"></textarea>
     </div>
 
     <div class="form-group">
-      <label class="labels">Deadline: </label>
-      <input type="date" placeholder="Deadline" ng-model="task.deadline" class="inputs"></input>
+      <label class="taskUpdateLabels">Deadline: </label>
+      <input type="date" placeholder="Deadline" ng-model="task.deadline" class="taskUpdateInputs"></input>
     </div>
 
     <div class="form-group">
-      <label class="labels">Completion</label>
-      <input type="text" placeholder="Completion" ng-model="task.completion" class="inputs"></input>
+      <label class="taskUpdateLabels">Completion</label>
+      <input type="text" placeholder="Completion" ng-model="task.completion" class="taskUpdateInputs"></input>
     </div>
 
     <div class="form-group">
-      <label class="labels">Expected Hours: </label>
-      <input type="text" placeholder="Expected Hours" ng-model="task.etc" class="inputs"></input>
+      <label class="taskUpdateLabels">Expected Hours: </label>
+      <input type="text" placeholder="Expected Hours" ng-model="task.etc" class="taskUpdateInputs"></input>
     </div>
     <br>
     <button type="submit">Update</button>

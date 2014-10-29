@@ -1,0 +1,21 @@
+.taskUpdateLabels {
+  display: inline-block; 
+  width: 200px;
+}
+.taskUpdateInputs {
+  width: 300px;
+}
+.projectUpdateLabels {
+  display: inline-block; 
+  width: 35%;
+}
+.projectUpdateInputs {
+  width: 55%;
+}
+.newProjectLabels {
+  display: inline-block; 
+  width: 25%;
+}
+.newProjectInputs {
+  width: 55%;
+}
