@@ -14,7 +14,9 @@ angular.module('teamMotivate')
 	'$location',
 	'session',
 	function($http, $scope, $location, session) {
-
+		if (session.name()) {
+			$location.path('home');
+		}
 		$scope.authenticate = function() {
 			if ($scope.name === '') { return; }
 			var userFields = {

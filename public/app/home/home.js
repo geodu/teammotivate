@@ -69,4 +69,8 @@ angular.module('teamMotivate')
       return session.name() !== undefined;
     }
 
+    $scope.logout = function() {
+      session.clear();
+      $location.path('login');
+    }
 }])
