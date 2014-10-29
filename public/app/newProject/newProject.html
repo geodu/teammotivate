@@ -1,23 +1,27 @@
-  <div class="page-header">
-		<h1>Create Project</h1>
-		<form ng-submit="createProject()">
-		<div class="form-group">
-	  	<input type="text" placeholder="Project Name" ng-model="name"></input>
-		</div>
+	 <div class="page-header">
+		<h1>Create Project</h1><br>
+		<form ng-submit="createProject()" style="width:500px">
+			<div class="form-group">
+				<label class="newProjectLabels">Name: </label>
+		  	<input type="text" placeholder="Project Name" ng-model="name" class="newProjectInputs"></input>
+			</div>
 
-	  <div class="form-group">
-	  	<textarea placeholder="Project Description" ng-model="description"></textarea>
-	  </div>
+		  <div class="form-group">
+		  	<label class="newProjectLabels">Description: </label>
+		  	<textarea placeholder="Project Description" ng-model="description" class="newProjectInputs"></textarea>
+		  </div>
 
-	  <div ng-repeat="user in selectedUsers">
-	  	{{user}}
-	  </div>
+		  <div class="form-group">
+		  	<label class="newProjectLabels">Add Members: </label>
+		  	<input type="text" placeholder="Member" ng-model="nextUser" class="newProjectInputs"></input>
+		  	<button ng-click="addUser()">Add</button>
+		  	<br>
+		  	<div ng-repeat="user in selectedUsers" class="form-group">
+		  		<div style="margin-left:130px">{{user}}</div>
+		  	</div>
+		  </div>
 
-	  <div>
-	  	<input type="text" placeholder="Member" ng-model="nextUser"></input>
-	  	<div ng-click="addUser()">Add</div>
-	  </div>
-	  <button type="submit">Create Project</button>
+		  <button type="submit">Create Project</button>
 		</form>
 	</div>
   <div ng-show="message">
